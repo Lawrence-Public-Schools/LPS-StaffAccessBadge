@@ -1,0 +1,6 @@
+<script type="text/javascript">
+$j(document).ready(function() {
+$j("ul#tchr_information > li > a[href^='photo.html?frn=']").parent().after($j('<li><a href="LPS-StaffAccessBadge.html?frn=~(frn)">Staff Access Badge</a></li>'));
+});
+</script>
+
