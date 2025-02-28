@@ -15,6 +15,17 @@
     <link href="/images/css/screen.css" rel="stylesheet" media="screen">
     <link href="/images/css/print.css" rel="stylesheet" media="print">
 
+    <style>
+        .teacher-info {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .teacher-details {
+            flex-grow: 1;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -25,108 +36,92 @@
     <a href="/admin/faculty/search.html" target="_top">~[text:psx.html.admin_faculty.photo.staff]</a> &gt;
     <a href="/admin/faculty/home.html?selectteacher=nosearch"
         target="_top">~[text:psx.html.admin_faculty.photo.select_a_staff_member]</a> &gt;
-    ~[text:psx.html.admin_faculty.photo.teacher_photo___nbsp1,param:~(lastfirst),param:~(teachernumber)]
-    ~[wc:admin_navigation_frame_css]
 
-    <!-- Conditional content based on sisuptakeenabled.admin_pds_uptake_access -->
-    ~[if#sisuptakeenabled.admin_pds_uptake_access]
-    <h1>~[text:psx.html.admin_faculty.photo.staff_photo]</h1>
-    [else#sisuptakeenabled]
-    <div class="staffProfile"></div>
-    <span class="account-photo">~[facultytitlephoto]</span>
-    <h1>~[text:psx.html.admin_faculty.photo.teacher_photo___nbsp2,param:~(lastfirst),param:~(teachernumber)]</h1>
-    </div>
-    [/if#sisuptakeenabled]
+    <!-- TODO: Make this work for staff access badge -->
+    ~[text:psx.html.admin_faculty.photo.staff_access_badge___nbsp1,param:~(lastfirst),param:~(teachernumber)]
+    ~[wc:admin_navigation_frame_css]
 
     <!-- Hidden Homeschool -->
     <div class="hidden">
         ~[if.isrestrictedbyerp]
         <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict"
             disabled="disabled">
-            <option value=Item>~[text:psx.html.admin_faculty.edit.item]
+            <option value=Item>~[text:psx.html.admin_faculty.edit.item]</option>
         </select>
         [else]
         <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict">
-            <option value=Item>~[text:psx.html.admin_faculty.edit.item]
+            <option value=Item>~[text:psx.html.admin_faculty.edit.item]</option>
         </select>
         [/if]
     </div>
 
     <!-- Start of content and bounding box -->
-    <div class="box-round">
-        <table border="0" cellspacing="0" cellpadding="4">
-            <tr>
-                <td align="center">~(teacherphoto)</td>
-            </tr>
-
-            <!-- TODO: Testing this to see if first name and last name show up as I want them to -->
-            <tr>
-                <td>
-                    ~[if.isrestrictedbyerp]
-                    <input type="text" name="[05]First_Name" value="" size="15" maxlength="20" id="firstName"
-                        aria-label="~[text:psx.html.admin_faculty.edit.first_name]" disabled="disabled"
-                        aria-required="true">
-                    <input type="text" name="[05]Last_Name" value="" size="15" maxlength="20" id="lastName"
-                        aria-label="~[text:psx.html.admin_faculty.edit.last_name]" disabled="disabled"
-                        aria-required="true">,
-                    [else]
-                    <input type="text" name="[05]First_Name" value="" size="15" id="firstName"
-                        aria-label="~[text:psx.html.admin_faculty.edit.first_name]" maxlength="20" aria-required="true">
-                    <input type="text" name="[05]Last_Name" value="" size="15" id="lastName"
-                        aria-label="~[text:psx.html.admin_faculty.edit.last_name]" maxlength="20" aria-required="true">,
-                    [/if]
-                </td>
-            </tr>
-
-            <!--! Homeschool -->
-            <tr>
-                <td id="homeschool"></td>
-            </tr>
-
-            <!--! Teacher title -->
-            <tr>
-                <td class="bold"><label class="nopadding-label"
-                        for="title">~[text:psx.html.admin_faculty.edit.title]</label></td>
-                <td><input type="text" name="[05]title" value="" size="42" id="title"></td>
-            </tr>
-
-            <!--! Teacher email -->
-            <tr>
-                <td class="bold"><label class="nopadding-label" for="email_address">~[text:psx.html.admin_faculty.edit.email_address]</label></td>
-                ~[if#DisUUStat.district.uu.isEnabled]
-                <td>
-                    ~[if.isrestrictedbyerp]
-                    <input type="text" name="[05]email_addr" value="" size="50" id="email_address" disabled="disabled"></td>
-                    [else]
-                    <input type="text" name="[05]email_addr" value="" ~[getValidation:teachers.email_addr] size="50" id="email_address"  aria-required="true"></td>
-                    [/if]
-                [else#DisUUStat]
-                <td>
-                    ~[if.isrestrictedbyerp]
-                    <input type="text" name="[05]email_addr" value="" size="50" id="email_address" disabled="disabled"></td>
-                    [else]
-                    <input type="text" name="[05]email_addr" value="" size="50" id="email_address"></td>
-                    [/if]
-                [/if#DisUUStat]
-                </tr>
-
-            <!-- Conditional form based on modaccess -->
-            ~[if.modaccess]
-            <tr>
-                <td align="center"></td>
-                <form action="photo.html?frn=~(frn)&curtchrid=~(curtchrid)" method="POST"></form>
+    <div class="box-round" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+        <div class="teacher-info" style="display: flex; justify-content: center; align-items: center;">
+            <div class="teacher-photo" style="margin-right: 20px;">
+                <table border="0" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <td align="center">~(teacherphoto)</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="teacher-details">
+                <table border="0" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <td>
+                            ~[if.isrestrictedbyerp]
+                            <input type="text" name="[05]First_Name" value="" size="15" maxlength="20" id="firstName"
+                                aria-label="~[text:psx.html.admin_faculty.edit.first_name]" disabled="disabled"
+                                aria-required="true">
+                            <input type="text" name="[05]Last_Name" value="" size="15" maxlength="20" id="lastName"
+                                aria-label="~[text:psx.html.admin_faculty.edit.last_name]" disabled="disabled"
+                                aria-required="true">
+                            [else]
+                            <input type="text" name="[05]First_Name" value="" size="15" id="firstName"
+                                aria-label="~[text:psx.html.admin_faculty.edit.first_name]" maxlength="20"
+                                aria-required="true">
+                            <input type="text" name="[05]Last_Name" value="" size="15" id="lastName"
+                                aria-label="~[text:psx.html.admin_faculty.edit.last_name]" maxlength="20"
+                                aria-required="true">
+                            [/if]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="homeschool"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="[05]title" value="" size="42" id="title">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            ~[if.isrestrictedbyerp]
+                            <input type="text" name="[05]email_addr" value="" size="50" id="email_address"
+                                disabled="disabled">
+                            [else]
+                            <input type="text" name="[05]email_addr" value="" size="50" id="email_address"
+                                aria-required="true">
+                            [/if]
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Conditional form based on modaccess -->
+        ~[if.modaccess]
+        <div class="button-row">
+            <form action="photo.html?frn=~(frn)&curtchrid=~(curtchrid)" method="POST">
                 <input type="hidden" name="ac" value="deleteteacherphoto" />
                 <input type="hidden" name="frn" value="~(gpv.frn;encodehtml)" />
                 <input type="hidden" name="curtchrid" value="~(curtchrid)" />
                 <button type="submit" id="btnDelete"
                     class="confirmationReq">~[text:psx.html.admin_faculty.photo.delete_photo]</button>
-                <a href="submitphoto.html?frn=~(frn)&curtchrid=~(curtchrid)~[if#gs.gpv.gs=true]&gs=true[/if#gs]"
-                    class="button">~[text:psx.html.admin_faculty.photo.submit_a_new_photo_for,param:~(lastfirst)]</a>
-                </form>
-                </td>
-            </tr>
-            [/if.modaccess]
-        </table>
+            </form>
+            <a href="submitphoto.html?frn=~(frn)&curtchrid=~(curtchrid)~[if#gs.gpv.gs=true]&gs=true[/if#gs]"
+                class="button">~[text:psx.html.admin_faculty.photo.submit_a_new_photo_for,param:~(lastfirst)]</a>
+        </div>
+        [/if.modaccess]
         <br>
         <div class="button-row"></div>
     </div>
