@@ -151,6 +151,17 @@
             $j('#homeschool').html("<font size='-1' face='Verdana,Geneva,Arial,Helvetica,sans-serif'>*****</font>");
         else
             $j('#homeschool').html($j('#homeschoolSelect option:selected').text()); // Insert the text
+
+        // Extract values from inputs and replace them with text
+        const firstName = $j('#firstName').val();
+        const lastName = $j('#lastName').val();
+        const title = $j('#title').val();
+        const email = $j('#email_address').val();
+
+        $j('#firstName').replaceWith(`<span>${firstName}</span>`);
+        $j('#lastName').replaceWith(`<span>${lastName}</span>`);
+        $j('#title').replaceWith(`<span>${title}</span>`);
+        $j('#email_address').replaceWith(`<span>${email}</span>`);
     });
     function onload() { }
 </script>
