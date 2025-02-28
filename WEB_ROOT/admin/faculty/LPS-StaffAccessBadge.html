@@ -4,6 +4,7 @@
 
 <head>
     <!-- Conditional title based on detailview.admin_pds_uptake_access -->
+
     ~[if#detailview.admin_pds_uptake_access]
     <title>~[text:psx.html.admin_faculty.photo.staff_photo___nbsp,param:~(lastfirst),param:~(teachernumber)]</title>
     [else#detailview]
@@ -16,9 +17,21 @@
     <link href="/images/css/print.css" rel="stylesheet" media="print">
 
     <style>
+        .box-round {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
         .teacher-info {
             display: flex;
-            align-items: flex-start;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .teacher-photo {
+            margin-right: 20px;
         }
 
         .teacher-details {
@@ -34,14 +47,15 @@
     ~[wc:admin_header_frame_css]
     <a href="/admin/home.html" target="_top">~[text:psx.html.admin_faculty.photo.start_page]</a> &gt;
     <a href="/admin/faculty/search.html" target="_top">~[text:psx.html.admin_faculty.photo.staff]</a> &gt;
-    <a href="/admin/faculty/home.html?selectteacher=nosearch"
-        target="_top">~[text:psx.html.admin_faculty.photo.select_a_staff_member]</a> &gt;
+    <a href="/admin/faculty/home.html?selectteacher=nosearch" target="_top">~[text:psx.html.admin_faculty.photo.select_a_staff_member]</a> &gt;
 
     <!-- TODO: Make this work for staff access badge -->
-    ~[text:psx.html.admin_faculty.photo.staff_access_badge___nbsp1,param:~(lastfirst),param:~(teachernumber)]
+    <!-- * Can see from text:psx that this will need to be done via localizations -->
+    <!-- ? ~[text:psx.html.admin_faculty.photo.staff_access_badge___nbsp1,param:~(lastfirst),param:~(teachernumber)] -->
+    ~[text:psx.html.admin_faculty.photo.teacher_photo___nbsp1,param:~(lastfirst),param:~(teachernumber)]
     ~[wc:admin_navigation_frame_css]
 
-    <!-- Hidden Homeschool -->
+    <!-- Hidden Homeschool, only show the homeschool if the user is not restricted by ERP, if they are show ***** -->
     <div class="hidden">
         ~[if.isrestrictedbyerp]
         <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict"
@@ -55,10 +69,9 @@
         [/if]
     </div>
 
-    <!-- Start of content and bounding box -->
-    <div class="box-round" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-        <div class="teacher-info" style="display: flex; justify-content: center; align-items: center;">
-            <div class="teacher-photo" style="margin-right: 20px;">
+    <div class="box-round">
+        <div class="teacher-info">
+            <div class="teacher-photo">
                 <table border="0" cellspacing="0" cellpadding="4">
                     <tr>
                         <td align="center">~(teacherphoto)</td>
@@ -108,35 +121,30 @@
                 </table>
             </div>
         </div>
-        <!-- Conditional form based on modaccess -->
+        <!-- Conditional form based on modaccess to delete photo or submit new photo -->
         ~[if.modaccess]
-        <div class="button-row">
+        <div>
             <form action="photo.html?frn=~(frn)&curtchrid=~(curtchrid)" method="POST">
                 <input type="hidden" name="ac" value="deleteteacherphoto" />
                 <input type="hidden" name="frn" value="~(gpv.frn;encodehtml)" />
                 <input type="hidden" name="curtchrid" value="~(curtchrid)" />
-                <button type="submit" id="btnDelete"
-                    class="confirmationReq">~[text:psx.html.admin_faculty.photo.delete_photo]</button>
+                <button type="submit" id="btnDelete">~[text:psx.html.admin_faculty.photo.delete_photo]</button>
             </form>
             <a href="submitphoto.html?frn=~(frn)&curtchrid=~(curtchrid)~[if#gs.gpv.gs=true]&gs=true[/if#gs]"
-                class="button">~[text:psx.html.admin_faculty.photo.submit_a_new_photo_for,param:~(lastfirst)]</a>
+                class="button">Submit new photo</a>
         </div>
         [/if.modaccess]
         <br>
-        <div class="button-row"></div>
     </div>
     <br>
-    <!-- End of content and bounding box -->
 
-    <!-- Footer -->
     ~[wc:admin_footer_frame_css]
 
 </body>
 
 </html>
-<!-- end right frame -->
 
-<!-- * Script for Homeschool -->
+<!-- ! Script for Homeschool -->
 <script>
     $j(document).ready(function () {
         if ($j('#homeschoolSelect option:selected').text() === "*****")
