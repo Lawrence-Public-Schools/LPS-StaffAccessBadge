@@ -37,6 +37,26 @@
         .teacher-details {
             flex-grow: 1;
         }
+
+        .teacher-details span {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .teacher-details .name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .teacher-details .title {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        .teacher-details .email {
+            font-size: 1em;
+            color: #555;
+        }
     </style>
 
 </head>
@@ -47,12 +67,15 @@
     ~[wc:admin_header_frame_css]
     <a href="/admin/home.html" target="_top">~[text:psx.html.admin_faculty.photo.start_page]</a> &gt;
     <a href="/admin/faculty/search.html" target="_top">~[text:psx.html.admin_faculty.photo.staff]</a> &gt;
-    <a href="/admin/faculty/home.html?selectteacher=nosearch" target="_top">~[text:psx.html.admin_faculty.photo.select_a_staff_member]</a> &gt;
+    <a href="/admin/faculty/home.html?selectteacher=nosearch"
+        target="_top">~[text:psx.html.admin_faculty.photo.select_a_staff_member]</a> &gt;
+    Staff Access Badge
 
     <!-- TODO: Make this work for staff access badge -->
     <!-- * Can see from text:psx that this will need to be done via localizations -->
     <!-- ? ~[text:psx.html.admin_faculty.photo.staff_access_badge___nbsp1,param:~(lastfirst),param:~(teachernumber)] -->
-    ~[text:psx.html.admin_faculty.photo.teacher_photo___nbsp1,param:~(lastfirst),param:~(teachernumber)]
+    <!--! Disabling the dynamic bread crumb for now -->
+    <!-- ~[text:psx.html.admin_faculty.photo.teacher_photo___nbsp1,param:~(lastfirst),param:~(teachernumber)] -->
     ~[wc:admin_navigation_frame_css]
 
     <!-- Hidden Homeschool, only show the homeschool if the user is not restricted by ERP, if they are show ***** -->
@@ -158,10 +181,10 @@
         const title = $j('#title').val();
         const email = $j('#email_address').val();
 
-        $j('#firstName').replaceWith(`<span>${firstName}</span>`);
-        $j('#lastName').replaceWith(`<span>${lastName}</span>`);
-        $j('#title').replaceWith(`<span>${title}</span>`);
-        $j('#email_address').replaceWith(`<span>${email}</span>`);
+        $j('#firstName').replaceWith(`<span class="name">${firstName}</span>`);
+        $j('#lastName').replaceWith(`<span class="name">${lastName}</span>`);
+        $j('#title').replaceWith(`<span class="title">${title}</span>`);
+        $j('#email_address').replaceWith(`<span class="email">${email}</span>`);
     });
     function onload() { }
 </script>
