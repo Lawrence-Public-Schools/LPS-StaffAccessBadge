@@ -14,6 +14,7 @@
     ~[wc:commonscripts]
     <link href="/images/css/screen.css" rel="stylesheet" media="screen">
     <link href="/images/css/print.css" rel="stylesheet" media="print">
+
 </head>
 
 <body>
@@ -40,9 +41,14 @@
     <!-- Hidden Homeschool -->
     <div class="hidden">
         ~[if.isrestrictedbyerp]
-        <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict" disabled="disabled"><option value=Item>~[text:psx.html.admin_faculty.edit.item]</select>
+        <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict"
+            disabled="disabled">
+            <option value=Item>~[text:psx.html.admin_faculty.edit.item]
+        </select>
         [else]
-        <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict"><option value=Item>~[text:psx.html.admin_faculty.edit.item]</select>
+        <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict">
+            <option value=Item>~[text:psx.html.admin_faculty.edit.item]
+        </select>
         [/if]
     </div>
 
@@ -52,9 +58,58 @@
             <tr>
                 <td align="center">~(teacherphoto)</td>
             </tr>
+
+            <!-- TODO: Testing this to see if first name and last name show up as I want them to -->
+            <tr>
+                <td>
+                    ~[if.isrestrictedbyerp]
+                    <input type="text" name="[05]First_Name" value="" size="15" maxlength="20" id="firstName"
+                        aria-label="~[text:psx.html.admin_faculty.edit.first_name]" disabled="disabled"
+                        aria-required="true">
+                    <input type="text" name="[05]Last_Name" value="" size="15" maxlength="20" id="lastName"
+                        aria-label="~[text:psx.html.admin_faculty.edit.last_name]" disabled="disabled"
+                        aria-required="true">,
+                    [else]
+                    <input type="text" name="[05]First_Name" value="" size="15" id="firstName"
+                        aria-label="~[text:psx.html.admin_faculty.edit.first_name]" maxlength="20" aria-required="true">
+                    <input type="text" name="[05]Last_Name" value="" size="15" id="lastName"
+                        aria-label="~[text:psx.html.admin_faculty.edit.last_name]" maxlength="20" aria-required="true">,
+                    [/if]
+                </td>
+            </tr>
+
+            <!--! Homeschool -->
             <tr>
                 <td id="homeschool"></td>
             </tr>
+
+            <!--! Teacher title -->
+            <tr>
+                <td class="bold"><label class="nopadding-label"
+                        for="title">~[text:psx.html.admin_faculty.edit.title]</label></td>
+                <td><input type="text" name="[05]title" value="" size="42" id="title"></td>
+            </tr>
+
+            <!--! Teacher email -->
+            <tr>
+                <td class="bold"><label class="nopadding-label" for="email_address">~[text:psx.html.admin_faculty.edit.email_address]</label></td>
+                ~[if#DisUUStat.district.uu.isEnabled]
+                <td>
+                    ~[if.isrestrictedbyerp]
+                    <input type="text" name="[05]email_addr" value="" size="50" id="email_address" disabled="disabled"></td>
+                    [else]
+                    <input type="text" name="[05]email_addr" value="" ~[getValidation:teachers.email_addr] size="50" id="email_address"  aria-required="true"></td>
+                    [/if]
+                [else#DisUUStat]
+                <td>
+                    ~[if.isrestrictedbyerp]
+                    <input type="text" name="[05]email_addr" value="" size="50" id="email_address" disabled="disabled"></td>
+                    [else]
+                    <input type="text" name="[05]email_addr" value="" size="50" id="email_address"></td>
+                    [/if]
+                [/if#DisUUStat]
+                </tr>
+
             <!-- Conditional form based on modaccess -->
             ~[if.modaccess]
             <tr>
@@ -83,10 +138,10 @@
 
 </body>
 
-</html><!-- end right frame -->
+</html>
+<!-- end right frame -->
 
-
-<!-- !Problem for tmw: -->
+<!-- * Script for Homeschool -->
 <script>
     $j(document).ready(function () {
         if ($j('#homeschoolSelect option:selected').text() === "*****")
