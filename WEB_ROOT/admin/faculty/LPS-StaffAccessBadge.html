@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html>
-<!-- start right frame -->
 
 <head>
-    <!-- Conditional title based on detailview.admin_pds_uptake_access -->
-
     ~[if#detailview.admin_pds_uptake_access]
     <title>~[text:psx.html.admin_faculty.photo.staff_photo___nbsp,param:~(lastfirst),param:~(teachernumber)]</title>
     [else#detailview]
     <title>~[text:psx.html.admin_faculty.photo.teacher_photo___nbsp,param:~(lastfirst),param:~(teachernumber)]</title>
     [/if#detailview]
 
-    <!-- Common scripts and stylesheets -->
     ~[wc:commonscripts]
     <link href="/images/css/screen.css" rel="stylesheet" media="screen">
     <link href="/images/css/print.css" rel="stylesheet" media="print">
@@ -31,7 +27,7 @@
         }
 
         .teacher-photo {
-            margin-right: 20px;
+            margin-right: 5px;
         }
 
         .teacher-details {
@@ -71,26 +67,7 @@
         target="_top">~[text:psx.html.admin_faculty.photo.select_a_staff_member]</a> &gt;
     Staff Access Badge
 
-    <!-- TODO: Make this work for staff access badge -->
-    <!-- * Can see from text:psx that this will need to be done via localizations -->
-    <!-- ? ~[text:psx.html.admin_faculty.photo.staff_access_badge___nbsp1,param:~(lastfirst),param:~(teachernumber)] -->
-    <!--! Disabling the dynamic bread crumb for now -->
-    <!-- ~[text:psx.html.admin_faculty.photo.teacher_photo___nbsp1,param:~(lastfirst),param:~(teachernumber)] -->
     ~[wc:admin_navigation_frame_css]
-
-    <!-- Hidden Homeschool, only show the homeschool if the user is not restricted by ERP, if they are show ***** -->
-    <div class="hidden">
-        ~[if.isrestrictedbyerp]
-        <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict"
-            disabled="disabled">
-            <option value=Item>~[text:psx.html.admin_faculty.edit.item]</option>
-        </select>
-        [else]
-        <select id="homeschoolSelect" type="hidden" name="[05]homeSchoolId" special="schoolswithdistrict">
-            <option value=Item>~[text:psx.html.admin_faculty.edit.item]</option>
-        </select>
-        [/if]
-    </div>
 
     <div class="box-round">
         <div class="teacher-info">
@@ -142,6 +119,30 @@
                         </td>
                     </tr>
                 </table>
+                <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST">
+                    <table border="0" cellspacing="0" cellpadding="4">
+                        <tr>
+                            <td>
+                                <label for="facilityCode">Facility Code:</label>
+                                <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]facilitycode" id="facilityCode"
+                                    value="" size="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="cardNumber">Card Number:</label>
+                                <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]cardnumber" id="cardNumber"
+                                    value="" size="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="button-row"><input type="hidden" name="ac" value="prim">~[submitbutton]
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
             </div>
         </div>
         <!-- Conditional form based on modaccess to delete photo or submit new photo -->
@@ -157,19 +158,13 @@
                 class="button">Submit new photo</a>
         </div>
         [/if.modaccess]
-        <br>
     </div>
     <br>
 
     ~[wc:admin_footer_frame_css]
 
-</body>
-
-</html>
-
-<!-- ! Script for Homeschool -->
-<script>
-    $j(document).ready(function () {
+    <script>
+            $j(document).ready(function () {
         if ($j('#homeschoolSelect option:selected').text() === "*****")
             $j('#homeschool').html("<font size='-1' face='Verdana,Geneva,Arial,Helvetica,sans-serif'>*****</font>");
         else
@@ -186,5 +181,8 @@
         $j('#title').replaceWith(`<span class="title">${title}</span>`);
         $j('#email_address').replaceWith(`<span class="email">${email}</span>`);
     });
-    function onload() { }
-</script>
+    </script>
+    
+</body>
+
+</html>
