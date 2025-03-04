@@ -117,7 +117,7 @@ To create a new "table extension" in the Powerschool database, I created a new t
 
 1. Go to Start Page > System Administrator > Page and Data Management > Manage Database Extensions.
 2. Select the table you want to extend (in this case, the "SchoolStaff" table) and click "Add Extension".
-3. Name the extension "U_STAFF_VERKADA" and add fields called "facilitycode" and "cardnumber".
+3. I named the extension "U_STAFF_VERKADA" and added fields called "facilitycode" and "cardnumber".
 
 ### Writing to the Database
 
@@ -212,4 +212,4 @@ This is the (current 3/4/25) result of the page:
 
 ![alt text](images/image.png)
 
-It works as intended, and has data persistence beyond refreshes and page/user changes. I hope this helped you or myself better understand how to read/write to the Powerschool database- as well as inserting looks and functionality into the page. Contact me if you have any questions or need help with anything @ [email](mailto: john.sandoval@lawrence.k12.ma.us).
+Contact me if you have any questions or need help with anything at [john.sandoval@lawrence.k12.ma.us](mailto:john.sandoval@lawrence.k12.ma.us).
