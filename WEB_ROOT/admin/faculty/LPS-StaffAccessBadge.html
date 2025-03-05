@@ -36,12 +36,16 @@
 
         .teacher-details span {
             display: inline-block;
-            /* margin-right: 10px; */
         }
 
         .teacher-details .name {
             font-size: 1.5em;
             font-weight: bold;
+        }
+
+        .teacher-details .teacher-number {
+            font-size: 0.9em;
+            color: #555;
         }
 
         .teacher-details .title {
@@ -120,6 +124,10 @@
                         <td id="homeschool"></td>
                     </tr>
                     <tr>
+                        <td class="teacher-id">
+                            <span class="teacher-number">~(teachernumber)</span>
+                        </td>
+                    <tr>
                         <td>
                             ~[if.isrestrictedbyerp]
                             <input type="text" name="[05]email_addr" value="" size="50" id="email_address"
@@ -141,12 +149,19 @@
                                     <input type="text" name="[TEACHERS]title" value="" size="42" id="title">
                                 </td>
                             </tr>
-                            <td style="text-align: center;">
-                                <div class="button-row" style="display: flex; justify-content: center;">
-                                    <input type="hidden" name="ac" value="prim">
-                                    ~[submitbutton]
-                                </div>
-                            </td>
+                            <tr>
+                                <td style="text-align: center;">
+                                    <div class="button-row" style="display: flex; justify-content: center;">
+                                        <input type="hidden" name="ac" value="prim">
+                                        ~[submitbutton]
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">
+                                    <small>Manual override, title will update from Munis nightly unless employee is inactive.</small>
+                                </td>
+                            </tr>
                         </table>
                     </fieldset>
                 </form>
@@ -211,7 +226,7 @@
 
 <!-- TODO: -->
 <!-- 1. Combine all buttons into one form -->
-<!-- 2. Add user id (display only) above email -->
+<!-- 2. Add user id (display only) above email --> ✅
 <!-- 3. Mini text above title: "Manual override, title will update from Munis nightly unless employee is inactive.". -->
 <!-- 4. Insert place holder badge picture under Verkada Badge text -->
 <!-- 5. Add a button to link to print badge page, with the staff template selected. -->
