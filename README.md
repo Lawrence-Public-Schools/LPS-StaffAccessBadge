@@ -174,6 +174,7 @@ To write to the database, I created a form on our page that would allow the user
 
 ### Editing an Existing Table
 
+Start Page > System Administrator > Page and Data Management > Data Export Manager
 To make the title editable, I created a form modeled after the Verkada form. The title is stored in the "TEACHERS" table under the "title" field.
 
 ```html
