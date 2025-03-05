@@ -143,57 +143,46 @@
                 <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST">
                     <fieldset>
                         <legend>Title</legend>
-                        <table border="0" cellspacing="0" cellpadding="4">
-                            <tr>
-                                <td>
-                                    <input type="text" name="[TEACHERS]title" value="" size="42" id="title">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center;">
-                                    <div class="button-row" style="display: flex; justify-content: center;">
-                                        <input type="hidden" name="ac" value="prim">
-                                        ~[submitbutton]
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center;">
-                                    <small>Manual override, title will update from Munis nightly unless employee is inactive.</small>
-                                </td>
-                            </tr>
-                        </table>
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <p
+                                style="font-size: 0.8em; word-wrap: break-word; margin: 0 auto; font-weight: bold; background: none;">
+                                Manual override, title will update from Munis nightly unless employee is inactive.</p>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <label for="title" style="flex: 1;">Title:</label>
+                            <input type="text" name="[TEACHERS]title" id="title" value="" style="flex: 2; width: 100%;">
+                        </div>
+                        <!-- <div style="text-align: center;">
+                            <div class="button-row" style="display: flex; justify-content: center;">
+                                ~[submitbutton]
+                            </div>
+                        </div> -->
                     </fieldset>
-                </form>
-                <!-- Verkada Badge form -->
-                <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST">
+                    <!-- Verkada Badge form -->
                     <fieldset>
                         <legend>Verkada Badge</legend>
-                        <table border="0" cellspacing="0" cellpadding="4">
-                            <tr>
-                                <td>
-                                    <label for="facilityCode">Facility Code:</label>
-                                    <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERKADA]facilitycode"
-                                        id="facilityCode" value="" size="10">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="cardNumber">Card Number:</label>
-                                    <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERKADA]cardnumber" id="cardNumber"
-                                        value="" size="10">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: center;">
-                                    <div class="button-row" style="display: flex; justify-content: center;">
-                                        <input type="hidden" name="ac" value="prim">
-                                        ~[submitbutton]
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <img src="/admin/images/VerkadaBadge.jpg" alt="Verkada Badge Template"
+                                style="width: 100px; height: 100px; border: 1px solid #ccc; padding: 5px;">
+                            <p style="font-size: 0.8em; color: #555;">Example badge</p>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <label for="facilityCode" style="flex: 1;">Facility Code:</label>
+                            <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]facilitycode" id="facilityCode"
+                                value="" style="flex: 2; width: 100%;">
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <label for="cardNumber" style="flex: 1;">Card Number:</label>
+                            <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]cardnumber" id="cardNumber" value=""
+                                style="flex: 2; width: 100%;">
+                        </div>
                     </fieldset>
+                    <div style="text-align: center;">
+                        <div class="button-row" style="display: flex; justify-content: center;">
+                            <input type="hidden" name="ac" value="prim">
+                            ~[submitbutton]
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -226,7 +215,7 @@
 
 <!-- TODO: -->
 <!-- 1. Combine all buttons into one form -->
-<!-- 2. Add user id (display only) above email --> ✅
-<!-- 3. Mini text above title: "Manual override, title will update from Munis nightly unless employee is inactive.". -->
-<!-- 4. Insert place holder badge picture under Verkada Badge text -->
+<!-- 2. Add user id (display only) above email✅ -->
+<!-- 3. Mini text above title: "Manual override, title will update from Munis nightly unless employee is inactive."✅ -->
+<!-- 4. Insert place holder badge picture under Verkada Badge text✅-->
 <!-- 5. Add a button to link to print badge page, with the staff template selected. -->
