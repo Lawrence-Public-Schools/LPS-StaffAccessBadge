@@ -207,6 +207,12 @@ To make the title editable, I created a form modeled after the Verkada form. The
 </form>
 ```
 
+<!-- Section about picture uploads -->
+
+<!-- Section about combing forms onto one and struggling with  -->
+<!-- <input type="hidden" name="ac" value="prim"> -->
+<!-- to combine forms and AC -->
+
 ## Conclusion
 
 This is the (current 3/4/25) result of the page: 
