@@ -23,11 +23,14 @@
         .teacher-info {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            gap: 20px;
         }
 
         .teacher-photo {
-            margin-right: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .teacher-details {
@@ -93,13 +96,21 @@
         #imagePreview {
             display: none;
             margin-top: 10px;
+            text-align: center;
         }
 
         #imagePreview img {
-            max-width: 100%;
-            max-height: 200px;
-            border: 1px solid #ccc;
+            max-width: 80%;
+            max-height: 150px;
+            border: 2px solid #0066A5;
             padding: 5px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
         }
     </style>
 
@@ -125,31 +136,31 @@
                         <td align="center" class="teacher-photo-img">~(teacherphoto)</td>
                     </tr>
                 </table>
+                <div id="imagePreview">
+                    <img id="previewImg" src="#" alt="Image Preview">
+                    <p><i>Preview of new picture</i></p>
+                </div>
                 <!-- TODO: Working on photo file upload -->
                 ~[if.modaccess]
                 <div>
-                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data">
-                        <label for="fileInput" class="custom-file-upload" id="chooseFileLabel">Choose a file</label>
-                        <input type="file" name="filename" accept="image/*" required id="fileInput">
-                        <div class="button-row">
+                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data" style="margin: 0;">
+                        <label for="fileInput" class="custom-file-upload" id="chooseFileLabel" style="margin: 0;">Choose a file</label>
+                        <input type="file" name="filename" accept="image/*" required id="fileInput" style="margin: 0;">
+                        <div class="button-row" style="margin: 0;">
                             <input type="hidden" name="ac" value="submitteacherphoto">
                             <input type="hidden" name="frn" value="~(frn)">
                             <input type="hidden" name="curtchrid" value="~(curtchrid)">
-                            <button type="submit" id="submitButton">Upload new photo</button>
+                            <button type="submit" id="submitButton" class="custom-file-upload" style="margin-bottom: 10px; margin-left: 0; margin-right: 0;">Confirm upload</button>
                         </div>
                     </form>
-                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data">
+                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data" style="margin: 0;">
                         <input type="hidden" name="ac" value="deleteteacherphoto" />
                         <input type="hidden" name="frn" value="~(gpv.frn;encodehtml)" />
                         <input type="hidden" name="curtchrid" value="~(curtchrid)" />
-                        <div class="button-row">
-                            <button type="submit"
-                                id="btnDelete">~[text:psx.html.admin_faculty.photo.delete_photo]</button>
+                        <div class="button-row" style="margin: 0;">
+                            <button type="submit" id="btnDelete" style="margin: 0;">~[text:psx.html.admin_faculty.photo.delete_photo]</button>
                         </div>
                     </form>
-                </div>
-                <div id="imagePreview">
-                    <img id="previewImg" src="#" alt="Image Preview">
                 </div>
                 [/if.modaccess]
             </div>
