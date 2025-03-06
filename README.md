@@ -208,6 +208,7 @@ To make the title editable, I created a form modeled after the Verkada form. The
 ```
 
 <!-- Section about picture uploads -->
+<!-- Inserting pics in webroot to admin folder and bluesteel -->
 
 <!-- Section about combing forms onto one and struggling with  -->
 <!-- <input type="hidden" name="ac" value="prim"> -->
