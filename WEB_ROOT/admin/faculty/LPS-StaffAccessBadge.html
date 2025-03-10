@@ -304,29 +304,32 @@
             const lastName = $j('#lastName').val();
             const email = $j('#email_address').val();
 
+            // Replace inputs with spans containing the values
             $j('#firstName').replaceWith(`<span class="name">${firstName}</span>`);
             $j('#lastName').replaceWith(`<span class="name">${lastName}</span>`);
             $j('#email_address').replaceWith(`<span class="email">${email}</span>`);
         });
 
-        // Handle file input change event
+        // Handle file input change event  to show the submit button, hide the choose file label, and show the image preview
         document.getElementById('fileInput').addEventListener('change', function () {
             const submitButton = document.getElementById('submitButton');
             const chooseFileLabel = document.getElementById('chooseFileLabel');
             const imagePreview = document.getElementById('imagePreview');
             const previewImg = document.getElementById('previewImg');
 
+            // If a a file is selected, show the submit button, hide the choose file label, and show the image preview
             if (this.files.length > 0) {
                 submitButton.style.display = 'inline-block';
                 chooseFileLabel.style.display = 'none';
                 imagePreview.style.display = 'block';
-
-                const reader = new FileReader();
+                // Create a new FileReader object to read the file
+                const reader = new FileReader(); 
                 reader.onload = function (e) {
                     previewImg.src = e.target.result;
                 }
                 reader.readAsDataURL(this.files[0]);
             } else {
+                // Else, hide the submit button, show the choose file label, and hide the image preview
                 submitButton.style.display = 'none';
                 chooseFileLabel.style.display = 'inline-block';
                 imagePreview.style.display = 'none';
@@ -334,12 +337,35 @@
             }
         });
 
+        // Selects the report "Staff - ID's" by defaultk, which is passed as the name of the report
         document.addEventListener('DOMContentLoaded', function () {
-            const reportSelect = document.querySelector('select[name="reportname"]');
-            if (reportSelect) {
-                reportSelect.value = "Staff - ID's";
+        const reportSelect = document.querySelector('select[name="reportname"]');
+        if (reportSelect) {
+            reportSelect.value = "Staff - ID's";
+        }
+
+        // Disable "Print Badge" button if there are changes to title, facility code, or card number
+        const printBadgeButton = document.querySelector('#printBadgeForm button[type="submit"]');
+        const titleInput = document.getElementById('title');
+        const facilityCodeInput = document.getElementById('facilityCode');
+        const cardNumberInput = document.getElementById('cardNumber');
+        // Get the initial values of the inputs
+        const initialTitle = titleInput.value;
+        const initialFacilityCode = facilityCodeInput.value;
+        const initialCardNumber = cardNumberInput.value;
+        // Check for changes in the inputs
+        function checkForChanges() {
+            if (titleInput.value !== initialTitle || facilityCodeInput.value !== initialFacilityCode || cardNumberInput.value !== initialCardNumber) {
+                printBadgeButton.disabled = true; // Disable the button if there are changes
+            } else {
+                printBadgeButton.disabled = false; // Enable the button if there are no changes
             }
-        });
+        }
+        // Add event listeners to the inputs to check for changes
+        titleInput.addEventListener('input', checkForChanges);
+        facilityCodeInput.addEventListener('input', checkForChanges);
+        cardNumberInput.addEventListener('input', checkForChanges);
+    });
     </script>
 
 </body>
