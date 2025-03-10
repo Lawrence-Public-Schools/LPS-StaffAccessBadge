@@ -230,7 +230,8 @@
                         <div style="text-align: center; margin-bottom: 10px;">
                             <p
                                 style="font-size: 0.8em; word-wrap: break-word; margin: 0 auto; font-weight: bold; background: none;">
-                                Manual override, title will update from Munis nightly unless employee is inactive.</p>
+                                Manual override, title will update from Munis nightly unless employee is inactive.
+                            </p>
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="title" style="flex: 1;">Title:</label>
@@ -263,31 +264,29 @@
                         </div>
                     </div>
                 </form>
-                <!-- TODO: Build print report button -->
-                <h1>
-                    Building the print report button
-                </h1>
-                <!-- Print Badge Button -->
-                <form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST"
-                    style="text-align: center; margin-top: 10px;">
-                    <div id="printBadgeMessage" style="color: red; display: none; margin-bottom: 10px;">
-                        Changes must be submitted in order to print.
-                    </div>
-                    <table style="display:none;">
-                        <tr>
-                            <td class="bold">
-                                ~[text:psx.html.admin_facultylist.printformletters.which_report_would_you_like_to_print]
-                            </td>
-                            <td>~[x:reportlist;type=100,500]</td>
-                        </tr>
-                    </table>
-                    <input type="hidden" name="tchrsdothisfor" value="10431">
-                    <input type="hidden" name="staffID" value="~(frn)">
-                    <input type="hidden" name="reporttype" value="100">
-                    <input type="hidden" name="ac" value="printformletter">
-                    <button type="submit" class="custom-file-upload">Print Badge</button>
-                </form>
             </div>
+        </div>
+        <!-- Centered Print Badge Button Area -->
+        <div class="print-badge-container" style="text-align: center; margin-top: 20px;">
+            <form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST"
+                style="display: inline-block;">
+                <div id="printBadgeMessage" style="color: red; display: none; margin-bottom: 10px;">
+                    Changes must be submitted in order to print.
+                </div>
+                <table style="display:none;">
+                    <tr>
+                        <td class="bold">
+                            ~[text:psx.html.admin_facultylist.printformletters.which_report_would_you_like_to_print]
+                        </td>
+                        <td>~[x:reportlist;type=100,500]</td>
+                    </tr>
+                </table>
+                <input type="hidden" name="tchrsdothisfor" value="10431">
+                <input type="hidden" name="staffID" value="~(frn)">
+                <input type="hidden" name="reporttype" value="100">
+                <input type="hidden" name="ac" value="printformletter">
+                <button type="submit" class="custom-file-upload">Print Badge</button>
+            </form>
         </div>
     </div>
     <br>
@@ -307,32 +306,29 @@
             const lastName = $j('#lastName').val();
             const email = $j('#email_address').val();
 
-            // Replace inputs with spans containing the values
             $j('#firstName').replaceWith(`<span class="name">${firstName}</span>`);
             $j('#lastName').replaceWith(`<span class="name">${lastName}</span>`);
             $j('#email_address').replaceWith(`<span class="email">${email}</span>`);
         });
 
-        // Handle file input change event  to show the submit button, hide the choose file label, and show the image preview
+        // Handle file input change event
         document.getElementById('fileInput').addEventListener('change', function () {
             const submitButton = document.getElementById('submitButton');
             const chooseFileLabel = document.getElementById('chooseFileLabel');
             const imagePreview = document.getElementById('imagePreview');
             const previewImg = document.getElementById('previewImg');
 
-            // If a a file is selected, show the submit button, hide the choose file label, and show the image preview
             if (this.files.length > 0) {
                 submitButton.style.display = 'inline-block';
                 chooseFileLabel.style.display = 'none';
                 imagePreview.style.display = 'block';
-                // Create a new FileReader object to read the file
+
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     previewImg.src = e.target.result;
                 }
                 reader.readAsDataURL(this.files[0]);
             } else {
-                // Else, hide the submit button, show the choose file label, and hide the image preview
                 submitButton.style.display = 'none';
                 chooseFileLabel.style.display = 'inline-block';
                 imagePreview.style.display = 'none';
@@ -340,7 +336,6 @@
             }
         });
 
-        // Selects the report "Staff - ID's" by defaultk, which is passed as the name of the report
         document.addEventListener('DOMContentLoaded', function () {
             const reportSelect = document.querySelector('select[name="reportname"]');
             if (reportSelect) {
