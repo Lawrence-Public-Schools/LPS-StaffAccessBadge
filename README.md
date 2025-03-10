@@ -197,7 +197,7 @@ To make the title editable, I created a form modeled after the Verkada form. The
       </tr>
       <td style="text-align: center;">
         <div class="button-row" style="display: flex; justify-content: center;">
-            <!-- This is the submit button, done the way Powerschool likes it -->
+          <!-- This is the submit button, done the way Powerschool likes it -->
           <input type="hidden" name="ac" value="prim" />
           ~[submitbutton]
         </div>
@@ -216,8 +216,88 @@ To make the title editable, I created a form modeled after the Verkada form. The
 
 ## Conclusion
 
-This is the (current 3/4/25) result of the page: 
+This is the (current 3/4/25) result of the page:
 
 ![alt text](images/image.png)
 
 Contact me if you have any questions or need help with anything at [john.sandoval@lawrence.k12.ma.us](mailto:john.sandoval@lawrence.k12.ma.us).
+
+# ADD ALL THIS EVENTUALLY:
+
+Worked with logan on getting the print badge button to work to take the user directly to the page print report que
+
+I got the form to do this working pretty quickly with this code:
+
+```javascript
+<form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST"
+    style="text-align: center; margin-top: 10px;">
+    <table>
+        <tr>
+            <td class="bold">
+                ~[text:psx.html.admin_facultylist.printformletters.which_report_would_you_like_to_print]
+            </td>
+            <td>~[x:reportlist;type=100,500]</td>
+        </tr>
+    </table>
+    <input type="hidden" name="reporttype" value="100"> <!-- 100 is the file type for PDF -->
+    <input type="hidden" name="ac" value="printformletter">
+    <input type="hidden" name="staffID" value="~(frn)">
+    <input type="hidden" name="reportname" id="reportname" value="">
+    <button type="submit" class="custom-file-upload">Print Badge</button>
+</form>
+```
+
+It would submit into the que system but with these errors:
+![alt text](image.png)
+
+thus, it would not succesfully generate the PDF.
+
+Logan looked into this with me and using the brower tools we were able to see the input fields the _PowerSchool Dynamic Form_ was submitting. I had what is in reen but was missing what is in red:
+
+![alt text](image-1.png)
+
+This would explain why I was getting the "There are no records selected to print" error. The missing field:
+
+```html
+<input type="hidden" name="tchrsdothisfor" value="10431" />
+```
+
+indicates that we want to print for only one record and that the record is the one we are currently viewing.
+
+Now, the form looks like this:
+
+```html
+<form
+  id="printBadgeForm"
+  action="/admin/reportqueue/home.html"
+  method="POST"
+  style="text-align: center; margin-top: 10px;"
+>
+  <table style="display:none;">
+    <tr>
+      <td class="bold">
+        ~[text:psx.html.admin_facultylist.printformletters.which_report_would_you_like_to_print]
+      </td>
+      <td>~[x:reportlist;type=100,500]</td>
+    </tr>
+  </table>
+  <input type="hidden" name="tchrsdothisfor" value="10431" />
+  <input type="hidden" name="staffID" value="~(frn)" />
+  <input type="hidden" name="reporttype" value="100" />
+  <input type="hidden" name="ac" value="printformletter" />
+  <button type="submit" class="custom-file-upload">Print Badge</button>
+</form>
+```
+
+Now, the form submits correctly and generates the PDF. I also made a script so that the form would automatically submit as a "Staff ID" badge:
+
+```javascript
+document.addEventListener("DOMContentLoaded", function () {
+  const reportSelect = document.querySelector('select[name="reportname"]');
+  if (reportSelect) {
+    reportSelect.value = "Staff - ID's";
+  }
+});
+```
+
+This makes it nice anc clean so the user only has to click the button and the badge will be generated.
