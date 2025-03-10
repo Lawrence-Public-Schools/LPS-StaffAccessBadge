@@ -102,7 +102,7 @@
             cursor: pointer;
             padding: .2em .4em;
             margin: 5px 0;
-            font-size: 100%;
+            font-size: 120%;
             line-height: 1.2em;
             transition: all 0.3s;
         }
@@ -253,7 +253,10 @@
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="title" style="flex: 1;">Title:</label>
-                            <input type="text" name="[TEACHERS]title" id="title" value="" style="flex: 2; width: 100%;">
+                            <div style="flex: 2; width: 100%;">
+                                <small id="originalTitle" style="display: none; font-size: 0.8em; color: #555;"></small>
+                                <input type="text" name="[TEACHERS]title" id="title" value="" style="width: 100%;">
+                            </div>
                         </div>
                     </fieldset>
                     <!-- Verkada Badge form -->
@@ -266,13 +269,21 @@
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="facilityCode" style="flex: 1;">Facility Code:</label>
-                            <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]facilitycode" id="facilityCode"
-                                value="" style="flex: 2; width: 100%;">
+                            <div style="flex: 2; width: 100%;">
+                                <small id="originalFacilityCode"
+                                    style="display: none; font-size: 0.8em; color: #555;"></small>
+                                <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]facilitycode" id="facilityCode"
+                                    value="" style="width: 100%;">
+                            </div>
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="cardNumber" style="flex: 1;">Card Number:</label>
-                            <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]cardnumber" id="cardNumber" value=""
-                                style="flex: 2; width: 100%;">
+                            <div style="flex: 2; width: 100%;">
+                                <small id="originalCardNumber"
+                                    style="display: none; font-size: 0.8em; color: #555;"></small>
+                                <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]cardnumber" id="cardNumber"
+                                    value="" style="width: 100%;">
+                            </div>
                         </div>
                     </fieldset>
                     <div style="text-align: center;">
@@ -353,7 +364,7 @@
                 previewImg.src = '#';
             }
         });
-
+        
         document.addEventListener('DOMContentLoaded', function () {
             const reportSelect = document.querySelector('select[name="reportname"]');
             if (reportSelect) {
@@ -371,13 +382,42 @@
             const initialFacilityCode = facilityCodeInput.value;
             const initialCardNumber = cardNumberInput.value;
 
+            const originalTitle = document.getElementById('originalTitle');
+            const originalFacilityCode = document.getElementById('originalFacilityCode');
+            const originalCardNumber = document.getElementById('originalCardNumber');
+
+            originalTitle.textContent = `Original: ${initialTitle}`;
+            originalFacilityCode.textContent = `Original: ${initialFacilityCode}`;
+            originalCardNumber.textContent = `Original: ${initialCardNumber}`;
+
             function checkForChanges() {
                 if (titleInput.value !== initialTitle || facilityCodeInput.value !== initialFacilityCode || cardNumberInput.value !== initialCardNumber) {
                     printBadgeButton.disabled = true;
                     printBadgeMessage.style.display = 'block';
+
+                    if (titleInput.value !== initialTitle) {
+                        originalTitle.style.display = 'block';
+                    } else {
+                        originalTitle.style.display = 'none';
+                    }
+
+                    if (facilityCodeInput.value !== initialFacilityCode) {
+                        originalFacilityCode.style.display = 'block';
+                    } else {
+                        originalFacilityCode.style.display = 'none';
+                    }
+
+                    if (cardNumberInput.value !== initialCardNumber) {
+                        originalCardNumber.style.display = 'block';
+                    } else {
+                        originalCardNumber.style.display = 'none';
+                    }
                 } else {
                     printBadgeButton.disabled = false;
                     printBadgeMessage.style.display = 'none';
+                    originalTitle.style.display = 'none';
+                    originalFacilityCode.style.display = 'none';
+                    originalCardNumber.style.display = 'none';
                 }
             }
 
