@@ -270,6 +270,9 @@
                 <!-- Print Badge Button -->
                 <form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST"
                     style="text-align: center; margin-top: 10px;">
+                    <div id="printBadgeMessage" style="color: red; display: none; margin-bottom: 10px;">
+                        Changes must be submitted in order to print.
+                    </div>
                     <table style="display:none;">
                         <tr>
                             <td class="bold">
@@ -323,7 +326,7 @@
                 chooseFileLabel.style.display = 'none';
                 imagePreview.style.display = 'block';
                 // Create a new FileReader object to read the file
-                const reader = new FileReader(); 
+                const reader = new FileReader();
                 reader.onload = function (e) {
                     previewImg.src = e.target.result;
                 }
@@ -339,33 +342,36 @@
 
         // Selects the report "Staff - ID's" by defaultk, which is passed as the name of the report
         document.addEventListener('DOMContentLoaded', function () {
-        const reportSelect = document.querySelector('select[name="reportname"]');
-        if (reportSelect) {
-            reportSelect.value = "Staff - ID's";
-        }
-
-        // Disable "Print Badge" button if there are changes to title, facility code, or card number
-        const printBadgeButton = document.querySelector('#printBadgeForm button[type="submit"]');
-        const titleInput = document.getElementById('title');
-        const facilityCodeInput = document.getElementById('facilityCode');
-        const cardNumberInput = document.getElementById('cardNumber');
-        // Get the initial values of the inputs
-        const initialTitle = titleInput.value;
-        const initialFacilityCode = facilityCodeInput.value;
-        const initialCardNumber = cardNumberInput.value;
-        // Check for changes in the inputs
-        function checkForChanges() {
-            if (titleInput.value !== initialTitle || facilityCodeInput.value !== initialFacilityCode || cardNumberInput.value !== initialCardNumber) {
-                printBadgeButton.disabled = true; // Disable the button if there are changes
-            } else {
-                printBadgeButton.disabled = false; // Enable the button if there are no changes
+            const reportSelect = document.querySelector('select[name="reportname"]');
+            if (reportSelect) {
+                reportSelect.value = "Staff - ID's";
             }
-        }
-        // Add event listeners to the inputs to check for changes
-        titleInput.addEventListener('input', checkForChanges);
-        facilityCodeInput.addEventListener('input', checkForChanges);
-        cardNumberInput.addEventListener('input', checkForChanges);
-    });
+
+            // Disable "Print Badge" button if there are changes to title, facility code, or card number
+            const printBadgeButton = document.querySelector('#printBadgeForm button[type="submit"]');
+            const printBadgeMessage = document.getElementById('printBadgeMessage');
+            const titleInput = document.getElementById('title');
+            const facilityCodeInput = document.getElementById('facilityCode');
+            const cardNumberInput = document.getElementById('cardNumber');
+
+            const initialTitle = titleInput.value;
+            const initialFacilityCode = facilityCodeInput.value;
+            const initialCardNumber = cardNumberInput.value;
+
+            function checkForChanges() {
+                if (titleInput.value !== initialTitle || facilityCodeInput.value !== initialFacilityCode || cardNumberInput.value !== initialCardNumber) {
+                    printBadgeButton.disabled = true;
+                    printBadgeMessage.style.display = 'block';
+                } else {
+                    printBadgeButton.disabled = false;
+                    printBadgeMessage.style.display = 'none';
+                }
+            }
+
+            titleInput.addEventListener('input', checkForChanges);
+            facilityCodeInput.addEventListener('input', checkForChanges);
+            cardNumberInput.addEventListener('input', checkForChanges);
+        });
     </script>
 
 </body>
