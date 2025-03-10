@@ -153,23 +153,28 @@
                 ~[if.modaccess]
                 <div>
                     <!-- Photo file upload form -->
-                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data" style="margin: 0;">
-                        <label for="fileInput" class="custom-file-upload" id="chooseFileLabel" style="margin: 0;">Choose a file</label>
+                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data"
+                        style="margin: 0;">
+                        <label for="fileInput" class="custom-file-upload" id="chooseFileLabel" style="margin: 0;">Choose
+                            a file</label>
                         <input type="file" name="filename" accept="image/*" required id="fileInput" style="margin: 0;">
                         <div class="button-row" style="margin: 0;">
                             <input type="hidden" name="ac" value="submitteacherphoto">
                             <input type="hidden" name="frn" value="~(frn)">
                             <input type="hidden" name="curtchrid" value="~(curtchrid)">
-                            <button type="submit" id="submitButton" class="custom-file-upload" style="margin-bottom: 10px; margin-left: 0; margin-right: 0;">Confirm upload</button>
+                            <button type="submit" id="submitButton" class="custom-file-upload"
+                                style="margin-bottom: 10px; margin-left: 0; margin-right: 0;">Confirm upload</button>
                         </div>
                     </form>
                     <!-- Photo delete form -->
-                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data" style="margin: 0;">
+                    <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST" enctype="multipart/form-data"
+                        style="margin: 0;">
                         <input type="hidden" name="ac" value="deleteteacherphoto" />
                         <input type="hidden" name="frn" value="~(gpv.frn;encodehtml)" />
                         <input type="hidden" name="curtchrid" value="~(curtchrid)" />
                         <div class="button-row" style="margin: 0;">
-                            <button type="submit" id="btnDelete" style="margin: 0;">~[text:psx.html.admin_faculty.photo.delete_photo]</button>
+                            <button type="submit" id="btnDelete"
+                                style="margin: 0;">~[text:psx.html.admin_faculty.photo.delete_photo]</button>
                         </div>
                     </form>
                 </div>
@@ -258,6 +263,27 @@
                         </div>
                     </div>
                 </form>
+                <!-- TODO: Build print report button -->
+                <h1>
+                    Building the print report button
+                </h1>
+                <!-- Print Badge Button -->
+                <form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST"
+                    style="text-align: center; margin-top: 10px;">
+                    <table style="display:none;">
+                        <tr>
+                            <td class="bold">
+                                ~[text:psx.html.admin_facultylist.printformletters.which_report_would_you_like_to_print]
+                            </td>
+                            <td>~[x:reportlist;type=100,500]</td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="tchrsdothisfor" value="10431">
+                    <input type="hidden" name="staffID" value="~(frn)">
+                    <input type="hidden" name="reporttype" value="100">
+                    <input type="hidden" name="ac" value="printformletter">
+                    <button type="submit" class="custom-file-upload">Print Badge</button>
+                </form>
             </div>
         </div>
     </div>
@@ -305,6 +331,13 @@
                 chooseFileLabel.style.display = 'inline-block';
                 imagePreview.style.display = 'none';
                 previewImg.src = '#';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const reportSelect = document.querySelector('select[name="reportname"]');
+            if (reportSelect) {
+                reportSelect.value = "Staff - ID's";
             }
         });
     </script>
