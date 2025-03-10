@@ -93,6 +93,24 @@
             line-height: 1.2em;
         }
 
+        /* Style for print-badge-button that on hover grows in size */
+        .print-badge-button {
+            background-color: #0066A5;
+            border: 0 none;
+            border-radius: 4px;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: .2em .4em;
+            margin: 5px 0;
+            font-size: 100%;
+            line-height: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .print-badge-button:hover {
+            transform: scale(1.1);
+        }
+
         /* Initially hide the submit button */
         #submitButton {
             display: none;
@@ -285,7 +303,7 @@
                 <input type="hidden" name="staffID" value="~(frn)">
                 <input type="hidden" name="reporttype" value="100">
                 <input type="hidden" name="ac" value="printformletter">
-                <button type="submit" class="custom-file-upload">Print Badge</button>
+                <button type="submit" class="print-badge-button" style="width: 200px;">Print Badge</button>
             </form>
         </div>
     </div>
