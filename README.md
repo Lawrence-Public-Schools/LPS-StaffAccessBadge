@@ -300,4 +300,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 ```
 
-This makes it nice anc clean so the user only has to click the button and the badge will be generated.
+This makes it nice and clean so the user only has to click the button and the badge will be generated.
+
+<!-- Mention that I also did -->
+Disbale print button if changes are not saved 
+Image preview when submitting
+Added a picture of the example badge
+Added small text of original values for title, facility code and card number if edits are made
