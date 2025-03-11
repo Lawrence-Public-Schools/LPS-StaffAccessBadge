@@ -147,7 +147,7 @@ I got the form to start _mostly_ working pretty quickly with this code:
 </form>
 ```
 
-![alt text](image.png)
+![alt text](images/image-3.pngq
 
 It would submit into the queue system but with the errors of:
 
@@ -161,7 +161,7 @@ Logan looked into this with me and using the browser tools we were able to see t
 - tchrsdothisfor
 - reportname
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 This would explain why I was getting the "There are no records selected to print" error. The missing field:
 
