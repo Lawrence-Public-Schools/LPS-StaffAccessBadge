@@ -1,4 +1,6 @@
-> 📌 Will fill this out when done and in production
+> 📌 This project was a significant learning experience. I gained a deeper understanding of how PowerSchool interprets data and handles scripting. I faced numerous challenges and experimented with adding modern features such as image previews and state-based UI. 
+
+# LPS-StaffAccessBadge
 
 ## Table of Contents
 
