@@ -138,6 +138,13 @@
             gap: 10px;
             margin-top: 10px;
         }
+
+        /* Style for original small text */
+        .original-text {
+            display: none;
+            font-size: 0.8em;
+            color: #555;
+        }
     </style>
 
 </head>
@@ -247,14 +254,14 @@
                         <legend>Title</legend>
                         <div style="text-align: center; margin-bottom: 10px;">
                             <p
-                                style="font-size: 0.8em; word-wrap: break-word; margin: 0 auto; font-weight: bold; background: none;">
+                                style="font-size: 0.7em; word-wrap: break-word; margin: 0 auto; font-weight: bold; background: none;">
                                 Manual override, title will update from Munis nightly unless employee is inactive.
                             </p>
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="title" style="flex: 1;">Title:</label>
                             <div style="flex: 2; width: 100%;">
-                                <small id="originalTitle" style="display: none; font-size: 0.8em; color: #555;"></small>
+                                <small id="originalTitle" class="original-text"></small>
                                 <input type="text" name="[TEACHERS]title" id="title" value="" style="width: 100%;">
                             </div>
                         </div>
@@ -270,19 +277,17 @@
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="facilityCode" style="flex: 1;">Facility Code:</label>
                             <div style="flex: 2; width: 100%;">
-                                <small id="originalFacilityCode"
-                                    style="display: none; font-size: 0.8em; color: #555;"></small>
+                                <small id="originalFacilityCode" class="original-text"></small>
                                 <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]facilitycode" id="facilityCode"
-                                    value="" style="width: 100%;">
+                                    value="" style="width: 90%;">
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="cardNumber" style="flex: 1;">Card Number:</label>
-                            <div style="flex: 2; width: 100%;">
-                                <small id="originalCardNumber"
-                                    style="display: none; font-size: 0.8em; color: #555;"></small>
+                            <div style="flex: 2; width: 90%;">
+                                <small id="originalCardNumber" class="original-text"></small>
                                 <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]cardnumber" id="cardNumber"
-                                    value="" style="width: 100%;">
+                                    value="" style="width: 90%;">
                             </div>
                         </div>
                     </fieldset>
@@ -364,7 +369,7 @@
                 previewImg.src = '#';
             }
         });
-        
+
         document.addEventListener('DOMContentLoaded', function () {
             const reportSelect = document.querySelector('select[name="reportname"]');
             if (reportSelect) {
