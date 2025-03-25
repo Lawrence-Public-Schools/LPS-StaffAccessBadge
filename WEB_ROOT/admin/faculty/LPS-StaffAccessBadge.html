@@ -161,6 +161,9 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
         }
 
         /* Style for webcam video */
@@ -186,6 +189,12 @@
         /* Style for capture button on hover */
         #captureButton:hover {
             background-color: #0056b3;
+        }
+
+        #captureButton,
+        #cancelButton {
+            display: inline-block;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -251,9 +260,14 @@
 
                 <!-- Webcam video stream -->
                 <div id="webcamContainer" style="display: none;">
-                    <video id="video" autoplay></video>
-                    <div></div>
-                    <button id="captureButton" class="custom-file-upload">Capture Picture</button>
+                    <video id="video" autoplay style="display: none;"></video>
+                    <canvas id="videoCanvas" width="360" height="432"
+                        style="border: 2px solid #ccc; border-radius: 10px;"></canvas>
+                    <div>
+                        <button id="captureButton" class="custom-file-upload">Capture Picture</button>
+                        <button id="cancelButton" class="custom-file-upload"
+                            style="background-color: #F03F35;">Cancel</button>
+                    </div>
                 </div>
 
                 <!-- Image preview section -->
@@ -501,19 +515,16 @@
         const submitButton = document.getElementById('submitButton');
         const chooseFileLabel = document.getElementById('chooseFileLabel');
         const imagePreview = document.getElementById('imagePreview');
-        const cancelButton = document.createElement('button');
-        const printBadgeButton = document.querySelector('#printBadgeForm button[type="submit"]');
-        const deletePictureButton = document.getElementById('btnDelete');
+        const cancelButton = document.getElementById('cancelButton');
         const allInputs = document.querySelectorAll('input, select, textarea, button'); // Select all form elements
-
 
         let stream;
         let capturedImageData = null;
 
-        // Function to disable all buttons and fields except the "Capture Picture" button
+        // Function to disable all buttons and fields except the "Capture Picture" and "Cancel" buttons
         function disableButtonsAndFields() {
             allInputs.forEach((input) => {
-                if (input !== captureButton) {
+                if (input !== captureButton && input !== cancelButton) {
                     input.disabled = true;
                 }
             });
@@ -539,7 +550,7 @@
                     webcamContainer.style.display = 'block';
                     startWebcamButton.style.display = 'none';
                     imagePreview.style.display = 'none'; // Hide the preview while taking a new picture
-                    disableButtonsAndFields(); // Disable all buttons and fields except "Capture Picture"
+                    disableButtonsAndFields(); // Disable all buttons and fields except "Capture Picture" and "Cancel"
                 })
                 .catch((error) => console.error('Error accessing webcam:', error));
         });
@@ -551,7 +562,10 @@
             canvas.height = 432;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            stream.getTracks().forEach((track) => track.stop());
+            // Stop the webcam stream
+            if (stream) {
+                stream.getTracks().forEach((track) => track.stop());
+            }
 
             capturedImageData = canvas.toDataURL('image/jpeg');
             previewImg.src = capturedImageData;
@@ -635,15 +649,6 @@
         }
 
         // Add the cancel button functionality
-        cancelButton.textContent = 'Cancel';
-        cancelButton.style.backgroundColor = '#F03F35';
-        cancelButton.style.color = '#FFFFFF';
-        cancelButton.style.border = 'none';
-        cancelButton.style.borderRadius = '5px';
-        cancelButton.style.padding = '10px 20px';
-        cancelButton.style.cursor = 'pointer';
-        cancelButton.style.marginTop = '10px';
-
         cancelButton.addEventListener('click', () => {
             if (stream) {
                 stream.getTracks().forEach((track) => track.stop());
@@ -653,8 +658,6 @@
             startWebcamButton.style.display = 'block';
             enableButtonsAndFields(); // Enable all buttons and fields after canceling the webcam
         });
-
-        webcamContainer.appendChild(cancelButton);
     </script>
 
 </body>
