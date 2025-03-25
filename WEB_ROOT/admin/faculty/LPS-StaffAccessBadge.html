@@ -16,7 +16,176 @@
     <link href="/images/css/print.css" rel="stylesheet" media="print">
 
     <!-- Link to CSS sheet in the same directory -->
-    <link href="LPS-StaffAccessBadge.css" rel="stylesheet" type="text/css">
+    <!-- <link href="LPS-StaffAccessBadge.css" rel="stylesheet" type="text/css"> -->
+
+    <style>
+        /* Center content in a box with rounded corners */
+        .box-round {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Layout for teacher information section */
+        .teacher-info {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        /* Layout for teacher photo section */
+        .teacher-photo,
+        .teacher-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Style for teacher details spans */
+        .teacher-details span,
+        .teacher-details .name,
+        .teacher-details .teacher-number,
+        .teacher-details .title,
+        .teacher-details .email {
+            display: inline-block;
+        }
+
+        /* Style for teacher name */
+        .teacher-details .name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Style for teacher number */
+        .teacher-details .teacher-number,
+        .teacher-details .email {
+            font-size: 1em;
+            color: #555;
+        }
+
+        /* Style for teacher title */
+        .teacher-details .title {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        /* Style for fieldset legend */
+        fieldset legend {
+            font-size: 0.8em;
+        }
+
+        /* Hide file input button */
+        #fileInput {
+            display: none;
+        }
+
+        /* Style for custom file upload button */
+        .custom-file-upload,
+        #submitButton,
+        #btnDelete {
+            background-color: #0066A5;
+            border: 0 none;
+            border-radius: 4px;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: .2em .4em;
+            margin: 5px 0;
+            font-size: 100%;
+            line-height: 1.2em;
+        }
+
+        /* Style for print-badge-button that on hover grows in size */
+        .print-badge-button {
+            background-color: #0066A5;
+            border: 0 none;
+            border-radius: 4px;
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: .2em .4em;
+            margin: 5px 0;
+            font-size: 120%;
+            line-height: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .print-badge-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Initially hide the submit button */
+        #submitButton {
+            display: none;
+        }
+
+        /* Style for image preview */
+        #imagePreview {
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Style for image inside preview */
+        #imagePreview img {
+            max-width: 80%;
+            max-height: 150px;
+            border: 2px solid #0066A5;
+            padding: 5px;
+        }
+
+        /* Style for button row */
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Style for original small text */
+        .original-text {
+            display: none;
+            font-size: 0.8em;
+            color: #555;
+        }
+
+        #webcamContainer {
+            position: fixed;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #video {
+            width: 360px;
+            /* Adjusted size to maintain 120/144 aspect ratio */
+            height: 432px;
+            /* 120/144 aspect ratio scaled up */
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+
+        #captureButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #captureButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
@@ -79,10 +248,10 @@
                 </div>
 
                 <!-- Webcam video stream -->
-                <div id="webcamContainer" style="display: none; text-align: center; margin-top: 10px;">
-                    <video id="video" autoplay style="border: 1px solid #ccc; width: 350px; height: 200px;"></video>
-                    <button id="captureButton" class="custom-file-upload" style="margin-top: 10px;">Capture
-                        Picture</button>
+                <div id="webcamContainer" style="display: none;">
+                    <video id="video" autoplay></video>
+                    <div></div>
+                    <button id="captureButton" class="custom-file-upload">Capture Picture</button>
                 </div>
 
                 <!-- Image preview section -->
@@ -330,50 +499,50 @@
         const submitButton = document.getElementById('submitButton');
         const chooseFileLabel = document.getElementById('chooseFileLabel');
         const imagePreview = document.getElementById('imagePreview');
-        
+
         let stream;
         let capturedImageData = null; // To store the captured image data
-        
+
         // Function to show the "Confirm Upload" button
         function showConfirmUpload() {
             submitButton.style.display = 'inline-block';
             chooseFileLabel.style.display = 'none';
             imagePreview.style.display = 'block';
         }
-        
-        // Start the webcam when the "Take a New Picture" button is clicked
+
+        // Show the webcam popup
         startWebcamButton.addEventListener('click', () => {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then((mediaStream) => {
                     stream = mediaStream;
                     video.srcObject = stream;
-                    webcamContainer.style.display = 'block';
+                    webcamContainer.style.display = 'block'; // Show the popup
                     startWebcamButton.style.display = 'none';
                     imagePreview.style.display = 'none'; // Hide the preview while taking a new picture
                 })
                 .catch((error) => console.error('Error accessing webcam:', error));
         });
-        
-        // Capture the picture when the "Capture Picture" button is clicked
+
+        // Hide the webcam popup after capturing the picture
         captureButton.addEventListener('click', () => {
             const context = canvas.getContext('2d');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
+
             // Stop the webcam stream
             stream.getTracks().forEach((track) => track.stop());
-        
+
             // Show the captured image in the preview area
             capturedImageData = canvas.toDataURL('image/jpeg'); // Store the captured image data
             previewImg.src = capturedImageData;
-            webcamContainer.style.display = 'none';
+            webcamContainer.style.display = 'none'; // Hide the popup
             startWebcamButton.style.display = 'block';
-        
+
             // Show the "Confirm Upload" button
             showConfirmUpload();
         });
-        
+
         // Handle file input change event
         fileInput.addEventListener('change', function () {
             if (this.files.length > 0) {
@@ -392,23 +561,23 @@
                 previewImg.src = '#';
             }
         });
-        
+
         // Handle "Confirm Upload" button click
         submitButton.addEventListener('click', (event) => {
             if (capturedImageData) {
                 // If a webcam image is captured, submit it as a file
                 event.preventDefault(); // Prevent the default form submission
-        
+
                 // Create a form dynamically
                 const formData = new FormData();
                 formData.append('ac', 'submitteacherphoto');
                 formData.append('frn', '~(frn)');
                 formData.append('curtchrid', '~(curtchrid)');
-        
+
                 // Convert the captured image data to a Blob and append it to the form
                 const blob = dataURLToBlob(capturedImageData);
                 formData.append('filename', blob, 'captured-image.jpg');
-        
+
                 // Submit the form using fetch
                 fetch('LPS-StaffAccessBadge.html?frn=~(frn)', {
                     method: 'POST',
@@ -425,7 +594,7 @@
                     .catch((error) => console.error('Error uploading picture:', error));
             }
         });
-        
+
         // Utility function to convert a data URL to a Blob
         function dataURLToBlob(dataURL) {
             const parts = dataURL.split(',');
