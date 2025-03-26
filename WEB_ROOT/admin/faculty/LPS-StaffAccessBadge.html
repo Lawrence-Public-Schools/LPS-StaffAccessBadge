@@ -508,7 +508,10 @@
             return /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
         }
 
-        // Webcam photo capture
+        // ============================
+        // VARIABLE INITIALIZATION
+        // ============================
+        // References to HTML elements
         const startWebcamButton = document.getElementById('startWebcamButton');
         const webcamContainer = document.getElementById('webcamContainer');
         const video = document.getElementById('video');
@@ -522,9 +525,13 @@
         const cancelButton = document.getElementById('cancelButton');
         const allInputs = document.querySelectorAll('input, select, textarea, button'); // Select all form elements
 
+        // Variables for webcam stream and captured image data
         let stream;
         let capturedImageData = null;
 
+        // ============================
+        // UTILITY FUNCTIONS
+        // ============================
         // Function to disable all buttons and fields except the "Capture Picture" and "Cancel" buttons
         function disableButtonsAndFields() {
             allInputs.forEach((input) => {
@@ -544,6 +551,22 @@
             chooseFileLabel.style.pointerEvents = 'auto';
             chooseFileLabel.style.opacity = '1';
         }
+
+        // Utility function to convert a data URL to a Blob
+        function dataURLToBlob(dataURL) {
+            const parts = dataURL.split(',');
+            const mime = parts[0].match(/:(.*?);/)[1];
+            const binary = atob(parts[1]);
+            const array = [];
+            for (let i = 0; i < binary.length; i++) {
+                array.push(binary.charCodeAt(i));
+            }
+            return new Blob([new Uint8Array(array)], { type: mime });
+        }
+
+        // ============================
+        // EVENT LISTENERS
+        // ============================
 
         // Show the webcam popup
         startWebcamButton.addEventListener('click', () => {
@@ -582,7 +605,7 @@
                 .catch((error) => console.error('Error accessing webcam:', error));
         });
 
-        // Hide the webcam popup after capturing the picture
+        // Capture image when "Capture Picture" button is clicked
         captureButton.addEventListener('click', () => {
             const context = canvas.getContext('2d');
             canvas.width = 360;
@@ -613,18 +636,16 @@
             showConfirmUpload();
         });
 
-        // Function to show the "Confirm Upload" button
-        function showConfirmUpload() {
-            submitButton.style.display = 'inline-block';
-            chooseFileLabel.style.display = 'none';
-            imagePreview.style.display = 'block';
-
-            // Populate the hidden input with the captured image data
-            const capturedImageInput = document.getElementById('capturedImage');
-            if (capturedImageInput) {
-                capturedImageInput.value = capturedImageData;
+        // Cancel webcam when "Cancel" button is clicked
+        cancelButton.addEventListener('click', () => {
+            if (stream) {
+                stream.getTracks().forEach((track) => track.stop());
             }
-        }
+
+            webcamContainer.style.display = 'none';
+            startWebcamButton.style.display = 'block';
+            enableButtonsAndFields(); // Enable all buttons and fields after canceling the webcam
+        });
 
         // Handle "Confirm Upload" button click
         submitButton.addEventListener('click', (event) => {
@@ -649,7 +670,6 @@
                 })
                     .then((response) => {
                         if (response.ok) {
-                            alert('Picture uploaded successfully!');
                             location.reload(); // Reload the page to reflect the changes
                         } else {
                             alert('Failed to upload the picture.');
@@ -659,28 +679,22 @@
             }
         });
 
-        // Utility function to convert a data URL to a Blob
-        function dataURLToBlob(dataURL) {
-            const parts = dataURL.split(',');
-            const mime = parts[0].match(/:(.*?);/)[1];
-            const binary = atob(parts[1]);
-            const array = [];
-            for (let i = 0; i < binary.length; i++) {
-                array.push(binary.charCodeAt(i));
+        // ============================
+        // HELPER FUNCTIONS
+        // ============================
+
+        // Function to show the "Confirm Upload" button
+        function showConfirmUpload() {
+            submitButton.style.display = 'inline-block';
+            chooseFileLabel.style.display = 'none';
+            imagePreview.style.display = 'block';
+
+            // Populate the hidden input with the captured image data
+            const capturedImageInput = document.getElementById('capturedImage');
+            if (capturedImageInput) {
+                capturedImageInput.value = capturedImageData;
             }
-            return new Blob([new Uint8Array(array)], { type: mime });
         }
-
-        // Add the cancel button functionality
-        cancelButton.addEventListener('click', () => {
-            if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
-            }
-
-            webcamContainer.style.display = 'none';
-            startWebcamButton.style.display = 'block';
-            enableButtonsAndFields(); // Enable all buttons and fields after canceling the webcam
-        });
     </script>
 
 </body>
