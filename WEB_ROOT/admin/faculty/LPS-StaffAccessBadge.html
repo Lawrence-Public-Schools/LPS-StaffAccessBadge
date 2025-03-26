@@ -589,7 +589,8 @@
             canvas.height = 432;
 
             if (isSafariOrIOS()) {
-                // Capture from canvas for Safari/iOS
+                // Ensure the canvas is updated with the last frame before stopping the stream
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
                 capturedImageData = canvas.toDataURL('image/jpeg');
             } else {
                 // Capture from video for desktop
@@ -602,6 +603,7 @@
                 stream.getTracks().forEach((track) => track.stop());
             }
 
+            // Update the preview image with the captured data
             previewImg.src = capturedImageData;
             webcamContainer.style.display = 'none';
             startWebcamButton.style.display = 'block';
