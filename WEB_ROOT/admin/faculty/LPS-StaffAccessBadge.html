@@ -232,7 +232,7 @@
                         style="margin: 0;">
                         <label for="fileInput" class="custom-file-upload" id="chooseFileLabel" style="margin: 0;">Choose
                             a file</label>
-                        <input type="file" name="filename" accept="image/*" required id="fileInput" style="margin: 0;">
+                        <input type="file" name="filename" accept="image/*" id="fileInput" style="margin: 0;">
                         <div class="button-row" style="margin: 0;">
                             <input type="hidden" name="ac" value="submitteacherphoto">
                             <input type="hidden" name="frn" value="~(frn)">
@@ -260,9 +260,8 @@
 
                 <!-- Webcam video stream -->
                 <div id="webcamContainer" style="display: none;">
-                    <video id="video" autoplay style="display: none;"></video>
-                    <canvas id="videoCanvas" width="360" height="432"
-                        style="border: 2px solid #ccc; border-radius: 10px;"></canvas>
+                    <video id="video" autoplay></video>
+                    <canvas id="videoCanvas" width="360" height="432" style="display: none;"></canvas>
                     <div>
                         <button id="captureButton" class="custom-file-upload">Capture Picture</button>
                         <button id="cancelButton" class="custom-file-upload"
@@ -504,12 +503,17 @@
             cardNumberInput.addEventListener('input', checkForChanges);
         });
 
+        // Detect if the browser is Safari/iOS
+        function isSafariOrIOS() {
+            return /^((?!chrome|android).)*safari/i.test(navigator.userAgent) || /iPad|iPhone|iPod/.test(navigator.userAgent);
+        }
+
         // Webcam photo capture
         const startWebcamButton = document.getElementById('startWebcamButton');
         const webcamContainer = document.getElementById('webcamContainer');
         const video = document.getElementById('video');
+        const canvas = document.getElementById('videoCanvas');
         const captureButton = document.getElementById('captureButton');
-        const canvas = document.createElement('canvas');
         const previewImg = document.getElementById('previewImg');
         const fileInput = document.getElementById('fileInput');
         const submitButton = document.getElementById('submitButton');
@@ -546,7 +550,30 @@
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then((mediaStream) => {
                     stream = mediaStream;
-                    video.srcObject = stream;
+
+                    if (isSafariOrIOS()) {
+                        // Use canvas for Safari/iOS
+                        const context = canvas.getContext('2d');
+                        canvas.style.display = 'block';
+                        video.style.display = 'none';
+
+                        const updateCanvas = () => {
+                            if (stream) {
+                                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                                requestAnimationFrame(updateCanvas);
+                            }
+                        };
+
+                        video.srcObject = stream;
+                        video.play();
+                        updateCanvas();
+                    } else {
+                        // Use video for desktop
+                        video.srcObject = stream;
+                        video.style.display = 'block';
+                        canvas.style.display = 'none';
+                    }
+
                     webcamContainer.style.display = 'block';
                     startWebcamButton.style.display = 'none';
                     imagePreview.style.display = 'none'; // Hide the preview while taking a new picture
@@ -560,14 +587,21 @@
             const context = canvas.getContext('2d');
             canvas.width = 360;
             canvas.height = 432;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            if (isSafariOrIOS()) {
+                // Capture from canvas for Safari/iOS
+                capturedImageData = canvas.toDataURL('image/jpeg');
+            } else {
+                // Capture from video for desktop
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                capturedImageData = canvas.toDataURL('image/jpeg');
+            }
 
             // Stop the webcam stream
             if (stream) {
                 stream.getTracks().forEach((track) => track.stop());
             }
 
-            capturedImageData = canvas.toDataURL('image/jpeg');
             previewImg.src = capturedImageData;
             webcamContainer.style.display = 'none';
             startWebcamButton.style.display = 'block';
@@ -577,30 +611,17 @@
             showConfirmUpload();
         });
 
-        // Handle file input change event
-        fileInput.addEventListener('change', function () {
-            if (this.files.length > 0) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    previewImg.src = e.target.result;
-                    capturedImageData = null; // Clear captured image data if a file is selected
-                    // Show the "Confirm Upload" button
-                    showConfirmUpload();
-                };
-                reader.readAsDataURL(this.files[0]);
-            } else {
-                submitButton.style.display = 'none';
-                chooseFileLabel.style.display = 'inline-block';
-                imagePreview.style.display = 'none';
-                previewImg.src = '#';
-            }
-        });
-
         // Function to show the "Confirm Upload" button
         function showConfirmUpload() {
             submitButton.style.display = 'inline-block';
             chooseFileLabel.style.display = 'none';
             imagePreview.style.display = 'block';
+
+            // Populate the hidden input with the captured image data
+            const capturedImageInput = document.getElementById('capturedImage');
+            if (capturedImageInput) {
+                capturedImageInput.value = capturedImageData;
+            }
         }
 
         // Handle "Confirm Upload" button click
