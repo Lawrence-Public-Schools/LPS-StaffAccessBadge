@@ -384,11 +384,16 @@
                         <td class="bold">
                             ~[text:psx.html.admin_facultylist.printformletters.which_report_would_you_like_to_print]
                         </td>
-                        <td>~[x:reportlist;type=100,500]</td>
+                        <td>
+                            ~[x:reportlist;type=100,500]
+                        </td>
+                        <td>
+                            ~[x:tchrsdothisfor;single]
+                        </td>
                     </tr>
                 </table>
-                <input type="hidden" name="tchrsdothisfor" value="10431">
-                <input type="hidden" name="staffID" value="~(frn)">
+                <input type="hidden" name="tchrsdothisfor" value="~(tchrsdothisfor)">
+                <input type="hidden" name="frn" value="~(frn;encodehtml)">
                 <input type="hidden" name="reporttype" value="100">
                 <input type="hidden" name="ac" value="printformletter">
                 <button type="submit" class="print-badge-button" style="width: 200px;">Print Badge</button>
