@@ -1,4 +1,4 @@
-> 📌 This project was a significant learning experience. I gained a deeper understanding of how PowerSchool interprets data and handles scripting. I faced numerous challenges and experimented with adding modern features such as image previews and state-based UI. 
+> 📌 This project was a significant learning experience. I gained a deeper understanding of how PowerSchool interprets data and handles scripting. I faced numerous challenges and experimented with adding modern features such as image previews and state-based UI.
 
 # LPS-StaffAccessBadge
 
@@ -9,7 +9,9 @@
    - [Issues with Displaying Teacher Information](#issues-with-displaying-teacher-information)
    - [Trouble with the Homeschool](#trouble-with-the-homeschool)
    - [Getting the Print Feature to Work](#getting-the-print-feature-to-work)
+      - [Update: Fixing the Print Button](#update-fixing-the-print-button)
    - [Combining Two Forms into One](#combining-two-forms-into-one)
+   - [iOS Compatibility Challenges (Webcam Integration)](#ios-compatibility-challenges-webcam-integration)
 2. [Concepts Learned](#concepts-learned)
    - [Creating a New Table Extension](#creating-a-new-table-extension)
    - [Writing to the Database](#writing-to-the-database)
@@ -17,6 +19,7 @@
    - [Uploading a Photo](#uploading-a-photo)
    - [Inserting Hardcoded Pictures onto the HTML Page](#inserting-hardcoded-pictures-onto-the-html-page)
    - [Disabling the Print Button if Changes Are Not Saved](#disabling-the-print-button-if-changes-are-not-saved)
+   - [Webcam Integration](#webcam-integration)
 3. [Conclusion](#conclusion)
 
 ## Issues Encountered
@@ -211,6 +214,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
 With these changes, the print badge button now works as expected, generating a PDF that defaults to the double-sided badge card report.
 
+#### Update: Fixing the Print Button
+
+Upon testing I realized that the print button was successfully submitting the form but not printing the badge, however, only for one user. This was due to my misunderstanding of how the `tchrsdothisfor` field worked. I thought "10431" was a static value that identified which type of record to print. However, it is actually a dynamic value that changes based on the user being viewed. I had to change the value of `tchrsdothisfor` to be dynamicusing built in PowerSchool variables (Idea taken from Powerschool's "Print a Report" page).
+
+```html
+<form
+  id="printBadgeForm"
+  action="/admin/reportqueue/home.html"
+  method="POST"
+  style="display: inline-block;"
+>
+  <div
+    id="printBadgeMessage"
+    style="color: red; display: none; margin-bottom: 10px;"
+  >
+    Changes must be submitted in order to print.
+  </div>
+  <table style="display:none;">
+    <tr>
+      <td class="bold">
+        ~[text:psx.html.admin_facultylist.printformletters.which_report_would_you_like_to_print]
+      </td>
+      <td>~[x:reportlist;type=100,500]</td>
+      <td>~[x:tchrsdothisfor;single]</td> <!-- NEW: This is the dynamic value -->
+    </tr>
+  </table>
+  <input type="hidden" name="tchrsdothisfor" value="~(tchrsdothisfor)" /> <!-- NEW: Instead of static value -->
+  <input type="hidden" name="frn" value="~(frn;encodehtml)" />
+  <input type="hidden" name="reporttype" value="100" />
+  <input type="hidden" name="ac" value="printformletter" />
+  <button type="submit" class="print-badge-button" style="width: 200px;">
+    Print Badge
+  </button>
+</form>
+```
+
 ### Combining Two Forms into One
 
 I was asked to combine the Verkada Badge form and the Title form into one form. The issue was that each form had its own `ac` value that was being submitted. I needed to combine the forms and have only one `ac` value submitted.
@@ -254,6 +293,31 @@ I was asked to combine the Verkada Badge form and the Title form into one form. 
   <input type="submit" value="Submit" />
 </form>
 ```
+
+### iOS Compatibility Challenges (Webcam Integration)
+
+#### Problem
+
+- iOS/Safari does not support live video streaming in the same way as desktop browsers.
+
+#### Solution
+
+- Used `navigator.mediaDevices.getUserMedia` to access the webcam and handle permissions correctly.
+- Used a `canvas` element to continuously draw frames from the video feed for iOS devices.
+- Implemented a `requestAnimationFrame` loop to update the `canvas` in real-time during the webcam session.
+- Ensured the last frame was captured and displayed before stopping the webcam stream.
+
+#### Styling and Usability
+
+- Styled the webcam container, buttons, and image preview for a clean and user-friendly interface.
+- Ensured buttons like "Capture" and "Cancel" were intuitive and responsive.
+
+#### Testing and Debugging
+
+- Tested on desktop browsers (Chrome) and iOS devices (Safari).
+- Debugged issues with iOS-specific behavior, such as black screens after capturing images, and resolved them by ensuring proper `canvas` updates.
+
+This process involved overcoming significant challenges with iOS compatibility, particularly with live video streaming and image capture. By leveraging `canvas` for real-time updates and ensuring the last frame was captured correctly, we achieved a seamless experience across platforms.
 
 ## Concepts Learned
 
@@ -543,6 +607,29 @@ function checkForChanges() {
   }
 }
 ```
+
+### Webcam Integration
+
+#### Accessing the Webcam
+
+- Used `navigator.mediaDevices.getUserMedia` to access the webcam for capturing images.
+- Implemented a `video` element for live webcam streaming and a `canvas` element for capturing still images.
+
+#### Image Capture
+
+- Captured the current frame from the webcam feed using `canvas.getContext('2d').drawImage`.
+- Converted the captured image to a Base64 string using `canvas.toDataURL` and then to a `Blob` using a utility function (`dataURLToBlob`).
+
+#### Form Submission
+
+- Dynamically created a `FormData` object to include the captured image as a file (`Blob`) along with other required form fields.
+- Used the `fetch` API to submit the form data to the server.
+
+#### UI Enhancements
+
+- Added a preview of the captured image using an `img` element.
+- Disabled unnecessary form elements during webcam usage to prevent user interaction.
+- Added a "Confirm Upload" button that becomes visible after capturing an image.
 
 ## Conclusion
 
