@@ -175,3 +175,46 @@
             display: inline-block;
             margin-top: 10px;
         }
+        
+        /* Container for collapsible section */
+        .collapsible-container {
+            width: 100%;
+            max-width: 600px;
+            /* Adjust width as needed */
+            margin: 1% auto;
+        }
+
+        /* Style for collapsible header */
+        .lpsCollapsibleHeader {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f1f1f1;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        /* Style for collapsible header when expanded */
+        .lpsCollapsibleHeader.expanded {
+            background-color: #e0e0e0;
+        }
+
+        /* Style for collapsible content */
+        #instructionsContent {
+            padding: 10px;
+            background-color: #fff;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        /* Style for collapsed content */
+        #instructionsContent.collapsed {
+            max-height: 0;
+            padding: 0 10px;
+        }
+
+        /* Style for expanded content */
+        #instructionsContent:not(.collapsed) {
+            max-height: fit-content;
+            padding: 10px;
+        }
