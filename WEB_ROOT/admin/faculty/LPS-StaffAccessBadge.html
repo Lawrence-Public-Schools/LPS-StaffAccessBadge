@@ -21,6 +21,7 @@
     <style>
         /* Center content in a box with rounded corners */
         .box-round {
+            border: none;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -191,10 +192,54 @@
             background-color: #0056b3;
         }
 
+        /* Style for cancel button */
         #captureButton,
         #cancelButton {
             display: inline-block;
             margin-top: 10px;
+        }
+
+        /* Container for collapsible section */
+        .collapsible-container {
+            width: 100%;
+            max-width: 600px;
+            /* Adjust width as needed */
+            margin: 1% auto;
+        }
+
+        /* Style for collapsible header */
+        .lpsCollapsibleHeader {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f1f1f1;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        /* Style for collapsible header when expanded */
+        .lpsCollapsibleHeader.expanded {
+            background-color: #e0e0e0;
+        }
+
+        /* Style for collapsible content */
+        #instructionsContent {
+            padding: 10px;
+            background-color: #fff;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        /* Style for collapsed content */
+        #instructionsContent.collapsed {
+            max-height: 0;
+            padding: 0 10px;
+        }
+
+        /* Style for expanded content */
+        #instructionsContent:not(.collapsed) {
+            max-height: fit-content;
+            padding: 10px;
         }
     </style>
 </head>
@@ -212,6 +257,39 @@
     ~[wc:admin_navigation_frame_css]
 
     <div class="box-round">
+        <!-- Collapsible section for instructions -->
+        <div class="collapsible-container">
+            <h2 pss-expand-collapse-item="instructions" class="lpsCollapsibleHeader colored-background">
+                <u>Instructions</u> <small>(Click to Expand/Collapse)</small>
+            </h2>
+            <div id="instructionsContent" class="collapsed">
+                <div class="row">
+                    <p>Picture Instructions:</p>
+                    <ul>
+                        <li>To take a new picture, click on the "Take a New Picture" button.</li>
+                        <li>To upload a new picture, click on "Choose a file".</li>
+                        <li>To delete the current picture, click on "Delete Picture".</li>
+                        <li>Ensure all changes are saved before printing the badge.</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <p>Title Instructions:</p>
+                    <ul>
+                        <li>The title field is used for the Staff Badge.</li>
+                        <li>The title will update from Munis nightly unless the employee is inactive.</li>
+                        <li>Make sure to submit any changes to the title before printing the badge.</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <p>Verkada Badge Instructions:</p>
+                    <ul>
+                        <li>The Verkada Badge section is used to manage the facility code and card number.</li>
+                        <li>You can find the facility code and card number as shown in the example image.</li>
+                        <li>Ensure all changes are submitted before printing the badge.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="teacher-info">
             <div class="teacher-photo">
                 <!-- Display teacher photo -->
@@ -700,6 +778,16 @@
                 capturedImageInput.value = capturedImageData;
             }
         }
+
+        // JavaScript to handle collapsible behavior
+        document.querySelectorAll('.lpsCollapsibleHeader').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const isCollapsed = content.classList.contains('collapsed');
+                header.classList.toggle('expanded', isCollapsed);
+                content.classList.toggle('collapsed', !isCollapsed);
+            });
+        });
     </script>
 
 </body>

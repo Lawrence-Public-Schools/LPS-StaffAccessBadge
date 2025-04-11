@@ -293,3 +293,13 @@ function showConfirmUpload() {
         capturedImageInput.value = capturedImageData;
     }
 }
+
+// JavaScript to handle collapsible behavior
+document.querySelectorAll('.lpsCollapsibleHeader').forEach(header => {
+    header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const isCollapsed = content.classList.contains('collapsed');
+        header.classList.toggle('expanded', isCollapsed);
+        content.classList.toggle('collapsed', !isCollapsed);
+    });
+});

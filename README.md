@@ -634,3 +634,5 @@ function checkForChanges() {
 ## Conclusion
 
 If you have any questions or need help with anything at [john.sandoval@lawrence.k12.ma.us](mailto:john.sandoval@lawrence.k12.ma.us).
+
+<!-- Document the process of creating a PowerSchool DB extension plugin, I accidentally deleted the original one and now the Verkada badge is not working. -->
