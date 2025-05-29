@@ -20,6 +20,7 @@
    - [Inserting Hardcoded Pictures onto the HTML Page](#inserting-hardcoded-pictures-onto-the-html-page)
    - [Disabling the Print Button if Changes Are Not Saved](#disabling-the-print-button-if-changes-are-not-saved)
    - [Webcam Integration](#webcam-integration)
+   - [Ensuring Print Forms Open in a New Page](#ensuring-print-forms-open-in-a-new-page)
 3. [Conclusion](#conclusion)
 
 ## Issues Encountered
@@ -150,7 +151,7 @@ I got the form to start _mostly_ working pretty quickly with this code:
 </form>
 ```
 
-![alt text](images/image-3.pngq
+![alt text](images/image-3.png)
 
 It would submit into the queue system but with the errors of:
 
@@ -333,6 +334,8 @@ To create a new "table extension" in the Powerschool database, I created a new t
 
 To write to the database, I created a form on our page that would allow the user to input the `facility code` and `card number`.
 
+*(5/29/25) NOTE: We shifted to a different database extension called `SCHOOLSTAFF.U_VERKADA` to match the naming conventions used in the PowerSchool database.*
+
 ```html
 <!-- Verkada Badge form -->
 <form action="LPS-StaffAccessBadge.html?frn=~(frn)" method="POST">
@@ -341,13 +344,13 @@ To write to the database, I created a form on our page that would allow the user
     <table border="0" cellspacing="0" cellpadding="4">
       <tr>
         <td>
-          <!-- Following the [table.extension]field format -->
-          <!-- The [SCHOOLSTAFF.U_STAFF_VERKADA] is the table extension -->
+          <!-- Following the [coretable.group]field format -->
+          <!-- The [SCHOOLSTAFF.US_VERKADA] is the table extension -->
           <!-- The facilitycode and cardnumber are the fields in the extension we are writing/reading -->
           <label for="facilityCode">Facility Code:</label>
           <input
             type="text"
-            name="[SCHOOLSTAFF.U_STAFF_VERKADA]facilitycode"
+            name="[SCHOOLSTAFF.U_VERKADA]facilitycode"
             id="facilityCode"
             value=""
             size="10"
@@ -359,7 +362,7 @@ To write to the database, I created a form on our page that would allow the user
           <label for="cardNumber">Card Number:</label>
           <input
             type="text"
-            name="[SCHOOLSTAFF.U_STAFF_VERKADA]cardnumber"
+            name="[SCHOOLSTAFF.U_VERKADA]cardnumber"
             id="cardNumber"
             value=""
             size="10"
@@ -630,6 +633,14 @@ function checkForChanges() {
 - Added a preview of the captured image using an `img` element.
 - Disabled unnecessary form elements during webcam usage to prevent user interaction.
 - Added a "Confirm Upload" button that becomes visible after capturing an image.
+
+### Ensuring Print Forms Open in a New Page
+
+- To make a form submission open in a new browser window (not in an iframe or within the current page), add `target="_top"` to the `<form>` tag. Example:
+  ```html
+  <form action="/admin/reportqueue/home.html" method="POST" target="_top">
+  ```
+- This ensures the print badge/report opens as a full page, matching the behavior of other PowerSchool print forms.
 
 ## Conclusion
 

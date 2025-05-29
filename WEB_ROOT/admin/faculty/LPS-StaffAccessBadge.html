@@ -428,7 +428,7 @@
                             <label for="facilityCode" style="flex: 1; color: #F03F35;">Facility Code:</label>
                             <div style="flex: 2; width: 100%;">
                                 <small id="originalFacilityCode" class="original-text"></small>
-                                <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]facilitycode" id="facilityCode"
+                                <input type="text" name="[SCHOOLSTAFF.U_VERKADA]facilitycode" id="facilityCode"
                                     value="" style="width: 90%;">
                             </div>
                         </div>
@@ -436,7 +436,7 @@
                             <label for="cardNumber" style="flex: 1; color: #3F88EF;">Card Number:</label>
                             <div style="flex: 2; width: 90%;">
                                 <small id="originalCardNumber" class="original-text"></small>
-                                <input type="text" name="[SCHOOLSTAFF.U_STAFF_VERDAKA]cardnumber" id="cardNumber"
+                                <input type="text" name="[SCHOOLSTAFF.U_VERKADA]cardnumber" id="cardNumber"
                                     value="" style="width: 90%;">
                             </div>
                         </div>
@@ -453,7 +453,7 @@
         <!-- Centered Print Badge Button Area -->
         <div class="print-badge-container" style="text-align: center; margin-top: 20px;">
             <form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST"
-                style="display: inline-block;">
+                style="display: inline-block;" target="_top">
                 <div id="printBadgeMessage" style="color: red; display: none; margin-bottom: 10px;">
                     Changes must be submitted in order to print.
                 </div>
@@ -528,7 +528,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const reportSelect = document.querySelector('select[name="reportname"]');
             if (reportSelect) {
-                reportSelect.value = "Staff - ID's";
+                reportSelect.value = "ID-Sta-FrontOnly_v2";
             }
 
             // Disable "Print Badge" button if there are changes to title, facility code, or card number
