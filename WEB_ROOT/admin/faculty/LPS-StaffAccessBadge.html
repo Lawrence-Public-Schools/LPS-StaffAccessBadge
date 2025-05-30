@@ -301,6 +301,10 @@
                 <!-- Image preview section -->
                 <div id="imagePreview">
                     <img id="previewImg" src="#" alt="Image Preview">
+                    <div class="button-row" style="justify-content: center; margin-top: 5px;">
+                        <button type="button" id="rotatePreviewBtn" class="custom-file-upload"
+                            style="padding: 2px 10px;">Rotate</button>
+                    </div>
                     <p><i>Preview of new picture</i></p>
                 </div>
                 ~[if.modaccess]
@@ -428,16 +432,16 @@
                             <label for="facilityCode" style="flex: 1; color: #F03F35;">Facility Code:</label>
                             <div style="flex: 2; width: 100%;">
                                 <small id="originalFacilityCode" class="original-text"></small>
-                                <input type="text" name="[SCHOOLSTAFF.U_VERKADA]facilitycode" id="facilityCode"
-                                    value="" style="width: 90%;">
+                                <input type="text" name="[SCHOOLSTAFF.U_VERKADA]facilitycode" id="facilityCode" value=""
+                                    style="width: 90%;">
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <label for="cardNumber" style="flex: 1; color: #3F88EF;">Card Number:</label>
                             <div style="flex: 2; width: 90%;">
                                 <small id="originalCardNumber" class="original-text"></small>
-                                <input type="text" name="[SCHOOLSTAFF.U_VERKADA]cardnumber" id="cardNumber"
-                                    value="" style="width: 90%;">
+                                <input type="text" name="[SCHOOLSTAFF.U_VERKADA]cardnumber" id="cardNumber" value=""
+                                    style="width: 90%;">
                             </div>
                         </div>
                     </fieldset>
@@ -452,8 +456,8 @@
         </div>
         <!-- Centered Print Badge Button Area -->
         <div class="print-badge-container" style="text-align: center; margin-top: 20px;">
-            <form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST"
-                style="display: inline-block;" target="_top">
+            <form id="printBadgeForm" action="/admin/reportqueue/home.html" method="POST" style="display: inline-block;"
+                target="_top">
                 <div id="printBadgeMessage" style="color: red; display: none; margin-bottom: 10px;">
                     Changes must be submitted in order to print.
                 </div>
@@ -760,6 +764,148 @@
                     })
                     .catch((error) => console.error('Error uploading picture:', error));
             }
+        });
+
+        // ============================
+        // IMAGE PREVIEW ROTATION
+        // ============================
+        let rotation = 0;
+        const rotatePreviewBtn = document.getElementById('rotatePreviewBtn');
+        if (rotatePreviewBtn && previewImg) {
+            rotatePreviewBtn.addEventListener('click', function () {
+                rotation = (rotation + 90) % 360;
+                previewImg.style.transform = `rotate(${rotation}deg)`;
+            });
+        }
+        // Reset rotation when a new file is selected or webcam is used
+        function resetPreviewRotation() {
+            rotation = 0;
+            if (previewImg) previewImg.style.transform = 'rotate(0deg)';
+        }
+        if (fileInput) {
+            fileInput.addEventListener('change', resetPreviewRotation);
+        }
+        if (captureButton) {
+            captureButton.addEventListener('click', resetPreviewRotation);
+        }
+
+        // ============================
+        // ROTATION-AWARE IMAGE UPLOAD
+        // ============================
+        // Intercept the Confirm Upload button to apply rotation before upload
+        submitButton.addEventListener('click', function (event) {
+            // Only intercept if a file is selected (not webcam)
+            if (fileInput.files && fileInput.files.length > 0) {
+                event.preventDefault();
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new window.Image();
+                    img.onload = function () {
+                        // Create a canvas to apply rotation
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
+                        // Set canvas size based on rotation
+                        if (rotation % 180 === 0) {
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                        } else {
+                            canvas.width = img.height;
+                            canvas.height = img.width;
+                        }
+                        // Move to center and rotate
+                        ctx.save();
+                        ctx.translate(canvas.width / 2, canvas.height / 2);
+                        ctx.rotate((rotation * Math.PI) / 180);
+                        ctx.drawImage(
+                            img,
+                            -img.width / 2,
+                            -img.height / 2
+                        );
+                        ctx.restore();
+                        // Convert canvas to blob and upload
+                        canvas.toBlob(function (blob) {
+                            const formData = new FormData();
+                            formData.append('ac', 'submitteacherphoto');
+                            formData.append('frn', '~(frn)');
+                            formData.append('curtchrid', '~(curtchrid)');
+                            formData.append('filename', blob, file.name);
+                            fetch('LPS-StaffAccessBadge.html?frn=~(frn)', {
+                                method: 'POST',
+                                body: formData,
+                            })
+                                .then((response) => {
+                                    if (response.ok) {
+                                        location.reload();
+                                    } else {
+                                        alert('Failed to upload the picture.');
+                                    }
+                                })
+                                .catch((error) => console.error('Error uploading picture:', error));
+                        }, file.type || 'image/jpeg');
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+            // If using webcam, let the existing handler run (it already uses the rotated preview)
+        });
+
+        // ============================
+        // ROTATION-AWARE IMAGE UPLOAD (WEBCAM)
+        // ============================
+        submitButton.addEventListener('click', function (event) {
+            if (capturedImageData) {
+                event.preventDefault();
+                // Load the captured image into an Image object
+                const img = new window.Image();
+                img.onload = function () {
+                    // Create a canvas to apply rotation
+                    let canvas = document.createElement('canvas');
+                    let ctx = canvas.getContext('2d');
+                    // Set canvas size based on rotation
+                    if (rotation % 180 === 0) {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                    } else {
+                        canvas.width = img.height;
+                        canvas.height = img.width;
+                    }
+                    // Move to center and rotate
+                    ctx.save();
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate((rotation * Math.PI) / 180);
+                    ctx.drawImage(
+                        img,
+                        -img.width / 2,
+                        -img.height / 2
+                    );
+                    ctx.restore();
+                    // Convert canvas to blob and upload
+                    canvas.toBlob(function (blob) {
+                        const formData = new FormData();
+                        formData.append('ac', 'submitteacherphoto');
+                        formData.append('frn', '~(frn)');
+                        formData.append('curtchrid', '~(curtchrid)');
+                        formData.append('filename', blob, 'captured-image.jpg');
+                        fetch('LPS-StaffAccessBadge.html?frn=~(frn)', {
+                            method: 'POST',
+                            body: formData,
+                        })
+                            .then((response) => {
+                                if (response.ok) {
+                                    location.reload();
+                                } else {
+                                    alert('Failed to upload the picture.');
+                                }
+                            })
+                            .catch((error) => console.error('Error uploading picture:', error));
+                    }, 'image/jpeg');
+                };
+                img.src = capturedImageData;
+                return; // Prevent further handling
+            }
+            // If using webcam, let the existing handler run (it already uses the rotated preview)
         });
 
         // ============================
